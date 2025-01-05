@@ -1,44 +1,52 @@
-const vaultSchedule = [];
-const barsSchedule = [];
-const beamSchedule = [];
-const floorSchedule = [];
+const level3 = {};
+const level4 = {};
+const level5 = {};
 
-for (let i = 8; i <= 20; i += 0.25) {
-  vaultSchedule.push(i);
-  barsSchedule.push(i);
-  beamSchedule.push(i);
-  floorSchedule.push(i);
-}
+for (let i = 2.5; i < 8; i += 0.25) {
+  let splitNum = i.toString().split(".");
+  let realTime = splitNum[0];
 
-const fullSchedule = {
-  vault: vaultSchedule,
-  bars: barsSchedule,
-  beam: beamSchedule,
-  floor: floorSchedule,
-};
-
-const hotShots = { startTime: 0, duration: 2.5, stations: ["bars", "beam"] };
-const level3 = {
-  startTime: 0,
-  duration: 2,
-  stations: ["vault", "beam", "floor"],
-};
-
-const addClass = (className, time) => {
-  for (const station of className.stations) {
-    if (!fullSchedule[station].includes(time)) {
-      return "Error";
-    }
-    fullSchedule[station].splice(
-      fullSchedule[station].indexOf(time),
-      className.duration * 4
-    );
+  if (!splitNum[1]) {
+    realTime += ":00";
+  }
+  if (splitNum[1] === "25") {
+    realTime += ":15";
+  }
+  if (splitNum[1] === "5") {
+    realTime += ":30";
+  }
+  if (splitNum[1] === "75") {
+    realTime += ":45";
   }
 
-  className.startTime = time;
-  return className;
-};
+  level3[realTime] = "";
+  level4[realTime] = "";
+  level5[realTime] = "";
+}
 
-console.log(addClass(hotShots, 15));
-console.log(addClass(level3, 10));
-console.log(fullSchedule);
+const fullSchedule = { level3: level3, level4: level4, level5: level5 };
+
+//
+
+function addHour(level, station, time) {
+  for (const eachLevel in fullSchedule) {
+    if (fullSchedule[eachLevel][time] === station) {
+      return "Error. Station in use at that time.";
+    }
+  }
+
+  const startKey = time;
+  const keys = Object.keys(fullSchedule[level]);
+  const startIndex = keys.indexOf(startKey);
+
+  for (let i = startIndex; i < startIndex + 4 && i < keys.length; i++) {
+    const key = keys[i];
+    fullSchedule[level][key] = station;
+  }
+
+  return fullSchedule;
+}
+
+console.log(addHour("level4", "beam", "3:15"));
+
+console.log(addHour("level3", "beam", "4:00"));
