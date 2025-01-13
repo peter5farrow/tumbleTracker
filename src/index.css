@@ -1,0 +1,25 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: smaller;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  justify-content: center;
+  text-align: center;
+}
+
+table {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid rgb(160 160 160);
+  padding: 8px 6px;
+}
