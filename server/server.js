@@ -1,6 +1,6 @@
-import { levelsList, levelsInfo } from "./levels";
+import { levelsList, levelsInfo } from "./levels.js";
 
-const fullSchedule = {
+export const fullSchedule = {
   mondayA: {},
   mondayB: {},
   tuesdayA: {},
@@ -9,12 +9,15 @@ const fullSchedule = {
   wednesdayB: {},
   thursdayA: {},
   thursdayB: {},
-  friday: {},
+  fridayA: {},
+  fridayB: {},
+  saturdayA: {},
+  saturdayB: {},
 };
 
 //
 
-function addLevelsToDay(levels, day) {
+export function addLevelsToDay(levels, day) {
   for (const level of levels) {
     fullSchedule[day][level] = {};
 
@@ -66,7 +69,9 @@ function addLevelsToDay(levels, day) {
   return fullSchedule[day];
 }
 
-function addEvent(day, level, event, startTime) {
+//
+
+export function addEvent(day, level, event, startTime) {
   const duration = levelsInfo[level].eventsAndDurations[event];
   const keys = Object.keys(fullSchedule[day][level]);
   const startIndex = keys.indexOf(startTime);
@@ -100,17 +105,9 @@ function addEvent(day, level, event, startTime) {
   return `Success! ${level} ${event} added to ${day}.`;
 }
 
-//
+// console.log(addEvent("mondayA", "pre3A", "vault", "5:30"));
+// console.log(addEvent("mondayB", "pre3B", "bars", "5:20"));
+// console.log(addEvent("mondayB", "pre3A", "floor", "3:00"));
+// console.log(addEvent("mondayB", "pre3B", "floor", "2:55"));
 
-const subset = [];
-for (let i = 0; i < 2; i++) {
-  subset.push(levelsList[i]);
-}
-addLevelsToDay(subset, "mondayB");
-
-console.log(addEvent("mondayB", "pre3A", "vault", "5:30"));
-console.log(addEvent("mondayB", "pre3B", "bars", "5:20"));
-console.log(addEvent("mondayB", "pre3A", "floor", "3:00"));
-console.log(addEvent("mondayB", "pre3B", "floor", "2:55"));
-
-console.log(fullSchedule["mondayB"]);
+// console.log(fullSchedule["mondayB"]);
