@@ -1,7 +1,7 @@
 import { levelsList, levelsInfo, times } from "../../server/levels";
 import { fullSchedule, addLevelsToDay, addEvent } from "../../server/server";
 
-export default function Calendar() {
+export default function Calendar({ day }) {
   // Headers
   const levelHeaders = levelsList.map((level) => {
     if (levelsList.indexOf(level) < levelsList.length / 2) {
@@ -9,17 +9,6 @@ export default function Calendar() {
     }
   });
 
-  // Testing
-  const subset = [];
-  for (let i = 0; i < levelsList.length / 2; i++) {
-    subset.push(levelsList[i]);
-  }
-  addLevelsToDay(subset, "mondayA");
-  console.log(addEvent("mondayA", "pre3A", "vault", "5:30"));
-  console.log(addEvent("mondayA", "whiteRibA", "floor", "3:55"));
-  console.log(addEvent("mondayA", "bronzeMedA", "beam", "2:45"));
-  console.log(addEvent("mondayA", "silverMedA", "bars", "4:30"));
-  console.log(addEvent("mondayA", "pre3B", "vault", "5:25"));
   // BUG ALERT! If the same group changes events at a certain time, remove all of the previous event, not just the overlapping slots.
 
   // Generating cells
