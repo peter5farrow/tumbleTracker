@@ -260,3 +260,5 @@ export const times = {
   "7:50": "",
   "7:55": "",
 };
+
+export const events = ["vault", "bars", "beam", "floor"];

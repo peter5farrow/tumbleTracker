@@ -11,9 +11,9 @@ export default function LevelInput({ day, inputLevel, handleLevelChange }) {
 
   return (
     <div>
-      <label>Class: </label>
+      <label htmlFor="levelInput">Class: </label>
       <select
-        name="levelInput"
+        id="levelInput"
         defaultValue={inputLevel}
         onChange={handleLevelChange}
       >
