@@ -5,13 +5,14 @@ import LevelInput from "./components/AddEventWindow/LevelInput";
 import EventInput from "./components/AddEventWindow/EventInput";
 import axios from "axios";
 import StartTimeInput from "./components/AddEventWindow/StartTimeInput";
+import LevelCheckboxes from "./components/LevelCheckboxes";
 
 const dayOptions = await axios.get("/api/days");
+const levelOptions = await axios.get("/api/levels");
+const eventOptions = await axios.get("/api/events");
 const timeOptions = await axios.get("/api/times");
 
 function App() {
-  const events = ["a, b, c, d"];
-
   const [inputDay, setInputDay] = useState("mondayA");
 
   const fetchDayObject = async () => {
@@ -20,8 +21,8 @@ function App() {
   };
 
   const [inputLevel, setInputLevel] = useState("pre3A");
-  const [inputEvent, setInputEvent] = useState(events[0]);
-  const [inputStartTime, setInputStartTime] = useState("2:30");
+  const [inputEvent, setInputEvent] = useState(eventOptions.data[0]);
+  const [inputStartTime, setInputStartTime] = useState(timeOptions.data[0]);
 
   // Event handlers
   const handleDayChange = (e) => {
@@ -40,9 +41,12 @@ function App() {
   return (
     <>
       <div>
+        <LevelCheckboxes levels={levelOptions.data} day={inputDay} />
+      </div>
+      <div>
         <h3>{inputDay}</h3>
         <DayInput
-          dayOptions={dayOptions.data}
+          days={dayOptions.data}
           inputDay={inputDay}
           handleDayChange={handleDayChange}
         />

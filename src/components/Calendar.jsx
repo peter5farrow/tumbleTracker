@@ -1,12 +1,7 @@
 import axios from "axios";
 
 export default function Calendar({ day, times }) {
-  async function getScheduleAtDay(day) {
-    const res = await axios.get("/api/day");
-    return res.data;
-  }
-
-  const today = getScheduleAtDay(day);
+  const today = day;
 
   // Headers
   const levelHeaders = Object.keys(today).map((level) => {
