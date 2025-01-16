@@ -1,7 +1,7 @@
-import { events } from "../../server/levels";
+export default function EventInput({ level, inputEvent, handleEventChange }) {
+  const eventsForLevel = Object.keys(level);
 
-export default function EventInput({ day, inputEvent, handleEventChange }) {
-  const eventOptions = events.map((event) => {
+  const eventOptions = eventsForLevel.map((event) => {
     return (
       <option key={event} value={event}>
         {event}

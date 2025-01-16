@@ -1,22 +1,30 @@
-import { levelsList, levelsInfo } from "./levels.js";
+import {
+  levelsList,
+  levelsInfo,
+  times,
+  events,
+  fullSchedule,
+} from "./gtcData.js";
+import express from "express";
+import morgan from "morgan";
+import ViteExpress from "vite-express";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-export const fullSchedule = {
-  mondayA: {},
-  mondayB: {},
-  tuesdayA: {},
-  tuesdayB: {},
-  wednesdayA: {},
-  wednesdayB: {},
-  thursdayA: {},
-  thursdayB: {},
-  fridayA: {},
-  fridayB: {},
-  saturdayA: {},
-  saturdayB: {},
-};
+// Define app and port
+const app = express();
+const port = process.env.PORT || 8000;
 
-//
+// Middleware
+app.use(morgan("dev"));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
+// Configure ViteExpress for development
+ViteExpress.config({ printViteDevServerHost: true });
+
+// Functions
 export function addLevelsToDay(levels, day) {
   for (const level of levels) {
     fullSchedule[day][level] = {};
@@ -66,12 +74,10 @@ export function addLevelsToDay(levels, day) {
       fullSchedule[day][level][realTime] = "";
     }
   }
-  return fullSchedule[day];
+  return `Success! ${levels} added to ${day}.`;
 }
 
-//
-
-export function addEvent(day, level, event, startTime) {
+export function addEventToLevel(day, level, event, startTime) {
   const duration = levelsInfo[level].eventsAndDurations[event];
   const keys = Object.keys(fullSchedule[day][level]);
   const startIndex = keys.indexOf(startTime);
@@ -102,12 +108,45 @@ export function addEvent(day, level, event, startTime) {
       fullSchedule[day][level][key] = event;
     }
   }
-  return `Success! ${level} ${event} added to ${day}.`;
+  return `Success! ${event} added to ${level}.`;
 }
+// Testing
 
-// console.log(addEvent("mondayA", "pre3A", "vault", "5:30"));
-// console.log(addEvent("mondayB", "pre3B", "bars", "5:20"));
-// console.log(addEvent("mondayB", "pre3A", "floor", "3:00"));
-// console.log(addEvent("mondayB", "pre3B", "floor", "2:55"));
+const subset = [];
+for (let i = 0; i < levelsList.length / 2; i++) {
+  subset.push(levelsList[i]);
+}
+addLevelsToDay(subset, "mondayA");
 
-// console.log(fullSchedule["mondayB"]);
+// addEvent("mondayA", "pre3A", "vault", "5:30");
+// addEvent("mondayA", "redRibA", "floor", "2:35");
+// addEvent("mondayA", "bronzeMedA", "beam", "2:45");
+// addEvent("mondayA", "silverMedA", "bars", "4:30");
+// addEvent("mondayA", "pre3B", "vault", "5:25");
+
+// Routes
+app.get("/api/days", (req, res) => {
+  res.send(Object.keys(fullSchedule));
+});
+
+app.get("/api/day:day", (req, res) => {
+  const { day } = req.params;
+  res.json(fullSchedule[day]);
+});
+
+app.get("/api/events", (req, res) => {});
+
+app.put("/api/levels", (req, res) => {
+  const { levels, day } = req.body;
+  res.send(addLevelsToDay(levels, day));
+});
+
+app.put("/api/event", (req, res) => {
+  const { day, level, event, startTime } = req.body;
+  res.send(addEventToLevel(day, level, event, startTime));
+});
+//
+
+ViteExpress.listen(app, port, () =>
+  console.log(`Server is listening on http://localhost:${port}`)
+);

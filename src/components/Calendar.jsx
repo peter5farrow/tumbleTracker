@@ -1,12 +1,16 @@
-import { levelsList, levelsInfo, times } from "../../server/levels";
-import { fullSchedule, addLevelsToDay, addEvent } from "../../server/server";
+import axios from "axios";
 
 export default function Calendar({ day }) {
+  async function getScheduleAtDay(day) {
+    const res = await axios.get("/api/day");
+    return res.data;
+  }
+
+  const today = getScheduleAtDay(day);
+
   // Headers
-  const levelHeaders = levelsList.map((level) => {
-    if (levelsList.indexOf(level) < levelsList.length / 2) {
-      return <th key={level}>{level}</th>;
-    }
+  const levelHeaders = Object.keys(today).map((level) => {
+    return <th key={level}>{level}</th>;
   });
 
   // BUG ALERT! If the same group changes events at a certain time, remove all of the previous event, not just the overlapping slots.
@@ -17,29 +21,29 @@ export default function Calendar({ day }) {
   for (const time in times) {
     const cells = [];
 
-    for (const level in fullSchedule.mondayA) {
-      if (fullSchedule.mondayA[level][time] === "vault") {
+    for (const level in today) {
+      if (today[level][time] === "vault") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "lightgreen" }}>
-            {fullSchedule.mondayA[level][time]}
+            {today[level][time]}
           </td>
         );
-      } else if (fullSchedule.mondayA[level][time] === "bars") {
+      } else if (today[level][time] === "bars") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "lightblue" }}>
-            {fullSchedule.mondayA[level][time]}
+            {today[level][time]}
           </td>
         );
-      } else if (fullSchedule.mondayA[level][time] === "beam") {
+      } else if (today[level][time] === "beam") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "lightpink" }}>
-            {fullSchedule.mondayA[level][time]}
+            {today[level][time]}
           </td>
         );
-      } else if (fullSchedule.mondayA[level][time] === "floor") {
+      } else if (today[level][time] === "floor") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "gold" }}>
-            {fullSchedule.mondayA[level][time]}
+            {today[level][time]}
           </td>
         );
       } else {

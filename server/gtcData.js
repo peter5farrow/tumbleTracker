@@ -184,6 +184,8 @@ export const levelsInfo = {
   },
 };
 
+// For generating level info
+
 // for (const level of levelsList) {
 //   levelsInfo[level] = {
 //     classesPerWeek: 2,
@@ -262,3 +264,18 @@ export const times = {
 };
 
 export const events = ["vault", "bars", "beam", "floor"];
+
+export const fullSchedule = {
+  mondayA: {},
+  mondayB: {},
+  tuesdayA: {},
+  tuesdayB: {},
+  wednesdayA: {},
+  wednesdayB: {},
+  thursdayA: {},
+  thursdayB: {},
+  fridayA: {},
+  fridayB: {},
+  saturdayA: {},
+  saturdayB: {},
+};
