@@ -129,6 +129,10 @@ app.get("/api/days", (req, res) => {
   res.send(Object.keys(fullSchedule));
 });
 
+app.get("/api/times", (req, res) => {
+  res.send(times);
+});
+
 app.get("/api/day:day", (req, res) => {
   const { day } = req.params;
   res.json(fullSchedule[day]);
@@ -144,6 +148,12 @@ app.put("/api/levels", (req, res) => {
 app.put("/api/event", (req, res) => {
   const { day, level, event, startTime } = req.body;
   res.send(addEventToLevel(day, level, event, startTime));
+});
+
+app.put("/api/add-event", (req, res) => {
+  const { day, level, event, startTime } = req.body;
+  fullSchedule[day][level][startTime] = event;
+  res.json({ isAdded: true });
 });
 //
 

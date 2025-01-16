@@ -5,9 +5,12 @@ import StartTimeInput from "./StartTimeInput";
 export default function AddEventWindow() {
   return (
     <div>
-      <LevelInput />
-      <EventInput />
-      <StartTimeInput />
+      <form action="/api/add-event">
+        <LevelInput />
+        <EventInput />
+        <StartTimeInput />
+        <button type="submit">Submit</button>
+      </form>
     </div>
   );
 }

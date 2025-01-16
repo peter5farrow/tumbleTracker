@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default function Calendar({ day }) {
+export default function Calendar({ day, times }) {
   async function getScheduleAtDay(day) {
     const res = await axios.get("/api/day");
     return res.data;

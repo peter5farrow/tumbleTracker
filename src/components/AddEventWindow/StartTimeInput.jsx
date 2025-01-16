@@ -1,5 +1,5 @@
-export default function StartTimeInput({ times }) {
-  const timeOptions = times.map((time) => {
+export default function StartTimeInput({ times, handleStartTimeChange }) {
+  const timeOptions = Object.keys(times).map((time) => {
     return (
       <option key={time} value={time}>
         {time}
@@ -10,7 +10,9 @@ export default function StartTimeInput({ times }) {
   return (
     <div>
       <label htmlFor="startTimeInput">Start time: </label>
-      <select id="startTimeInput">{timeOptions}</select>
+      <select id="startTimeInput" onChange={handleStartTimeChange}>
+        {timeOptions}
+      </select>
     </div>
   );
 }

@@ -7,21 +7,21 @@ import axios from "axios";
 import StartTimeInput from "./components/AddEventWindow/StartTimeInput";
 
 const dayOptions = await axios.get("/api/days");
+const timeOptions = await axios.get("/api/times");
 
 function App() {
   const events = ["a, b, c, d"];
 
   const [inputDay, setInputDay] = useState("mondayA");
-  console.log(dayOptions);
 
   const fetchDayObject = async () => {
     const res = await axios.get(`/api/day${inputDay}`);
     return res.data;
   };
 
-  const [inputLevel, setInputLevel] = useState(fetchDayObject()[0]);
+  const [inputLevel, setInputLevel] = useState("pre3A");
   const [inputEvent, setInputEvent] = useState(events[0]);
-  const [inputStartTime, setInputStartTime] = useState();
+  const [inputStartTime, setInputStartTime] = useState("2:30");
 
   // Event handlers
   const handleDayChange = (e) => {
@@ -42,29 +42,32 @@ function App() {
       <div>
         <h3>{inputDay}</h3>
         <DayInput
-          dayOptions={fetchDayOptions()}
+          dayOptions={dayOptions.data}
           inputDay={inputDay}
           handleDayChange={handleDayChange}
         />
 
         <h3>{inputLevel}</h3>
         <LevelInput
-          day={fetchDayObject()}
+          day={fetchDayObject(inputDay)}
           inputLevel={inputLevel}
           handleLevelChange={handleLevelChange}
         />
 
         <h3>{inputEvent}</h3>
         <EventInput
-          day={fetchDayObject()}
+          level={inputLevel}
           inputEvent={inputEvent}
           handleEventChange={handleEventChange}
         />
 
         <h3>{inputStartTime}</h3>
-        <StartTimeInput handleStartTimeChange={handleStartTimeChange} />
+        <StartTimeInput
+          times={timeOptions.data}
+          handleStartTimeChange={handleStartTimeChange}
+        />
       </div>
-      <Calendar day={fetchDayObject(inputDay)} />
+      <Calendar day={fetchDayObject(inputDay)} times={timeOptions.data} />
     </>
   );
 }
