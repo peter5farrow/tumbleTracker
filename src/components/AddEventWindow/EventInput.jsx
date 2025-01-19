@@ -1,7 +1,5 @@
-export default function EventInput({ level, inputEvent, handleEventChange }) {
-  const eventsForLevel = Object.keys(level);
-
-  const eventOptions = eventsForLevel.map((event) => {
+export default function EventInput({ events, inputEvent, handleEventChange }) {
+  const eventOptions = events.map((event) => {
     return (
       <option key={event} value={event}>
         {event}

@@ -1,10 +1,8 @@
 import axios from "axios";
 
 export default function Calendar({ day, times }) {
-  const today = day;
-
   // Headers
-  const levelHeaders = Object.keys(today).map((level) => {
+  const levelHeaders = Object.keys(day).map((level) => {
     return <th key={level}>{level}</th>;
   });
 
@@ -16,26 +14,26 @@ export default function Calendar({ day, times }) {
   for (const time in times) {
     const cells = [];
 
-    for (const level in today) {
-      if (today[level][time] === "vault") {
+    for (const level in day) {
+      if (day[level][time] === "vault") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "lightgreen" }}>
             {today[level][time]}
           </td>
         );
-      } else if (today[level][time] === "bars") {
+      } else if (day[level][time] === "bars") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "lightblue" }}>
             {today[level][time]}
           </td>
         );
-      } else if (today[level][time] === "beam") {
+      } else if (day[level][time] === "beam") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "lightpink" }}>
             {today[level][time]}
           </td>
         );
-      } else if (today[level][time] === "floor") {
+      } else if (day[level][time] === "floor") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "gold" }}>
             {today[level][time]}

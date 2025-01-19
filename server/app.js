@@ -150,7 +150,7 @@ app.get("/api/day:day", (req, res) => {
 
 app.put("/api/add-levels", (req, res) => {
   const { levels, day } = req.body;
-  res.send(addLevelsToDay(levels, day));
+  addLevelsToDay(levels, day);
   res.json({ isAdded: true });
 });
 
