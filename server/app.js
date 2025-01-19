@@ -77,8 +77,7 @@ function addLevelsToDay(levels, day) {
   return `Success! ${levels} added to ${day}.`;
 }
 
-function addEventToLevel(day, level, event, startTime) {
-  const duration = levelsInfo[level].eventsAndDurations[event];
+function addEventToLevel(day, level, event, startTime, duration) {
   const keys = Object.keys(fullSchedule[day][level]);
   const startIndex = keys.indexOf(startTime);
   let hasConflict = false;
@@ -110,6 +109,7 @@ function addEventToLevel(day, level, event, startTime) {
   }
   return `Success! ${event} added to ${level}.`;
 }
+
 // Testing
 
 const subset = [];
@@ -134,41 +134,32 @@ app.get("/api/levels", (req, res) => {
 });
 
 app.get("/api/times", (req, res) => {
-  res.send(Object.keys(times));
+  res.send(times);
 });
 
 app.get("/api/events", (req, res) => {
   res.send(events);
 });
 
-app.put("/api/add-levels", (req, res) => {
-  console.log(req.body);
-  addLevelsToDay(req.body[0], req.body[1]);
-  res.json({ isAdded: true });
-});
-
-//
-
 app.get("/api/day:day", (req, res) => {
   const { day } = req.params;
   res.json(fullSchedule[day]);
 });
 
-app.put("/api/levels", (req, res) => {
+//
+
+app.put("/api/add-levels", (req, res) => {
   const { levels, day } = req.body;
   res.send(addLevelsToDay(levels, day));
-});
-
-app.put("/api/event", (req, res) => {
-  const { day, level, event, startTime } = req.body;
-  res.send(addEventToLevel(day, level, event, startTime));
+  res.json({ isAdded: true });
 });
 
 app.put("/api/add-event", (req, res) => {
-  const { day, level, event, startTime } = req.body;
-  fullSchedule[day][level][startTime] = event;
+  const { day, level, event, startTime, duration } = req.body;
+  addEventToLevel(day, level, event, startTime, duration);
   res.json({ isAdded: true });
 });
+
 //
 
 ViteExpress.listen(app, port, () =>
