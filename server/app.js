@@ -96,7 +96,7 @@ function addEventToLevel(day, level, event, startTime, duration) {
   }
 
   if (hasConflict) {
-    return `Error. ${event} in use at selected time.`;
+    return { sched: fullSchedule[day], hasConflict: true };
   } else {
     for (
       let i = startIndex;
@@ -107,7 +107,7 @@ function addEventToLevel(day, level, event, startTime, duration) {
       fullSchedule[day][level][key] = event;
     }
   }
-  return `Success! ${event} added to ${level}.`;
+  return { sched: fullSchedule[day], hasConflict: false };
 }
 
 // Testing
@@ -125,6 +125,10 @@ for (let i = 0; i < levelsList.length / 2; i++) {
 // addEvent("mondayA", "pre3B", "vault", "5:25");
 
 // Routes
+app.get("/api/schedule", (req, res) => {
+  res.send(fullSchedule);
+});
+
 app.get("/api/days", (req, res) => {
   res.send(Object.keys(fullSchedule));
 });
@@ -156,8 +160,8 @@ app.put("/api/add-levels", (req, res) => {
 
 app.put("/api/add-event", (req, res) => {
   const { day, level, event, startTime, duration } = req.body;
-  addEventToLevel(day, level, event, startTime, duration);
-  res.json({ isAdded: true });
+  const sched = addEventToLevel(day, level, event, startTime, duration);
+  res.json(sched);
 });
 
 //

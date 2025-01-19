@@ -7,7 +7,9 @@ import axios from "axios";
 import StartTimeInput from "./components/AddEventWindow/StartTimeInput";
 import LevelCheckboxes from "./components/LevelCheckboxes";
 import DurationInput from "./components/AddEventWindow/DurationInput";
+import AddEventWindow from "./components/AddEventWindow/AddEventWindow";
 
+const schedule = await axios.get("/api/schedule");
 const dayOptions = await axios.get("/api/days");
 const levelOptions = await axios.get("/api/levels");
 const eventOptions = await axios.get("/api/events");
@@ -56,46 +58,42 @@ function App() {
   const handleDurationChange = (e) => {
     setInputDuration(e.target.value);
   };
+  const handleAddEvent = async (e) => {
+    e.preventDefault();
+    const res = await axios.put("/api/add-event", {
+      day: inputDay,
+      level: inputLevel,
+      event: inputEvent,
+      startTime: inputStartTime,
+      duration: inputDuration,
+    });
+
+    if (res.data.hasConflict) {
+      alert(`Error: ${inputEvent} in use at selected time.`);
+    }
+    setToday(res.data.sched);
+  };
 
   return (
     <>
-      {/* <div>
-        <LevelCheckboxes levels={levelOptions.data} day={inputDay} />
-      </div> */}
-      <div>
-        <h3>{inputDay}</h3>
-        <DayInput
-          days={dayOptions.data}
-          inputDay={inputDay}
-          handleDayChange={handleDayChange}
-        />
-
-        <h3>{inputLevel}</h3>
-        <LevelInput
-          day={today}
-          inputLevel={inputLevel}
-          handleLevelChange={handleLevelChange}
-        />
-
-        <h3>{inputEvent}</h3>
-        <EventInput
-          events={eventOptions.data}
-          inputEvent={inputEvent}
-          handleEventChange={handleEventChange}
-        />
-
-        <h3>{inputStartTime}</h3>
-        <StartTimeInput
-          times={timeOptions.data}
-          handleStartTimeChange={handleStartTimeChange}
-        />
-
-        <h3>{inputDuration}</h3>
-        <DurationInput
-          inputDuration={inputDuration}
-          handleDurationChange={handleDurationChange}
-        />
-      </div>
+      <DayInput
+        days={dayOptions.data}
+        inputDay={inputDay}
+        handleDayChange={handleDayChange}
+      />
+      <AddEventWindow
+        today={today}
+        inputLevel={inputLevel}
+        handleLevelChange={handleLevelChange}
+        eventOptions={eventOptions}
+        inputEvent={inputEvent}
+        handleEventChange={handleEventChange}
+        timeOptions={timeOptions}
+        handleStartTimeChange={handleStartTimeChange}
+        inputDuration={inputDuration}
+        handleDurationChange={handleDurationChange}
+        handleAddEvent={handleAddEvent}
+      />
       <Calendar day={today} times={timeOptions.data} />
     </>
   );

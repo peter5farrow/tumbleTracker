@@ -3,15 +3,46 @@ import EventInput from "./EventInput";
 import LevelInput from "./LevelInput";
 import StartTimeInput from "./StartTimeInput";
 
-export default function AddEventWindow() {
+export default function AddEventWindow({
+  today,
+  inputLevel,
+  handleLevelChange,
+  eventOptions,
+  inputEvent,
+  handleEventChange,
+  timeOptions,
+  handleStartTimeChange,
+  inputDuration,
+  handleDurationChange,
+  handleAddEvent,
+}) {
   return (
     <div>
       <form action="/api/add-event">
-        <LevelInput />
-        <EventInput />
-        <StartTimeInput />
-        <DurationInput />
-        <button type="submit">Submit</button>
+        <LevelInput
+          day={today}
+          inputLevel={inputLevel}
+          handleLevelChange={handleLevelChange}
+        />
+
+        <EventInput
+          events={eventOptions.data}
+          inputEvent={inputEvent}
+          handleEventChange={handleEventChange}
+        />
+
+        <StartTimeInput
+          times={timeOptions.data}
+          handleStartTimeChange={handleStartTimeChange}
+        />
+
+        <DurationInput
+          inputDuration={inputDuration}
+          handleDurationChange={handleDurationChange}
+        />
+        <button onClick={handleAddEvent} type="submit">
+          Submit
+        </button>
       </form>
     </div>
   );
