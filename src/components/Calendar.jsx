@@ -9,34 +9,33 @@ export default function Calendar({ day, times }) {
   // BUG ALERT! If the same group changes events at a certain time, remove all of the previous event, not just the overlapping slots.
 
   // Generating cells
-  // TO DO! Add forEach day functionality
   const rows = [];
-  for (const time in times) {
+  for (const time of times) {
     const cells = [];
 
     for (const level in day) {
       if (day[level][time] === "vault") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "lightgreen" }}>
-            {today[level][time]}
+            {day[level][time]}
           </td>
         );
       } else if (day[level][time] === "bars") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "lightblue" }}>
-            {today[level][time]}
+            {day[level][time]}
           </td>
         );
       } else if (day[level][time] === "beam") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "lightpink" }}>
-            {today[level][time]}
+            {day[level][time]}
           </td>
         );
       } else if (day[level][time] === "floor") {
         cells.push(
           <td key={`${time}${level}`} style={{ backgroundColor: "gold" }}>
-            {today[level][time]}
+            {day[level][time]}
           </td>
         );
       } else {
