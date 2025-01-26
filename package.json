@@ -7,7 +7,9 @@
     "dev": "nodemon server/app.js -w server -w src",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seed": "node server/seed.js",
+    "initdb": "dropdb --if-exists tumble_tracker_db && createdb tumble_tracker_db"
   },
   "dependencies": {
     "axios": "^1.7.9",

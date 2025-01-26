@@ -1,0 +1,98 @@
+[
+  {
+    "eventCode": "warmup",
+    "eventName": "Warmup"
+  },
+  {
+    "eventCode": "condition",
+    "eventName": "Conditioning"
+  },
+  {
+    "eventCode": "teamVault",
+    "eventName": "Team Vault"
+  },
+  {
+    "eventCode": "teamBars",
+    "eventName": "Team Bars"
+  },
+  {
+    "eventCode": "teamBeam",
+    "eventName": "Team Beam"
+  },
+  {
+    "eventCode": "teamFloor",
+    "eventName": "Team Floor"
+  },
+  {
+    "eventCode": "teamTT",
+    "eventName": "Team Tumbl Trak"
+  },
+  {
+    "eventCode": "teamStarBarsA",
+    "eventName": "Team Star Bars A"
+  },
+  {
+    "eventCode": "teamStarBarsB",
+    "eventName": "Team Star Bars B"
+  },
+  {
+    "eventCode": "teamLowBeam",
+    "eventName": "Team Low Beam"
+  },
+  {
+    "eventCode": "teamRodFloor",
+    "eventName": "Team Rod Floor"
+  },
+  {
+    "eventCode": "recVault",
+    "eventName": "Rec Vault"
+  },
+  {
+    "eventCode": "recBars",
+    "eventName": "Rec Bars"
+  },
+  {
+    "eventCode": "recBeam",
+    "eventName": "Rec Beam"
+  },
+  {
+    "eventCode": "recFloorA",
+    "eventName": "Rec Floor A"
+  },
+  {
+    "eventCode": "recFloorB",
+    "eventName": "Rec Floor B"
+  },
+  {
+    "eventCode": "recTT",
+    "eventName": "Rec Tumbl Trak"
+  },
+  {
+    "eventCode": "recTumbleStrip",
+    "eventName": "Rec Tumble Strip"
+  },
+  {
+    "eventCode": "preVault",
+    "eventName": "Preschool Vault"
+  },
+  {
+    "eventCode": "jfk",
+    "eventName": "Just For Kids"
+  },
+  {
+    "eventCode": "preBeam",
+    "eventName": "Preschool Beam"
+  },
+  {
+    "eventCode": "preFloor",
+    "eventName": "Preschool Floor"
+  },
+  {
+    "eventCode": "trampA",
+    "eventName": "Trampoline A"
+  },
+  {
+    "eventCode": "trampB",
+    "eventName": "Trampoline B"
+  }
+]

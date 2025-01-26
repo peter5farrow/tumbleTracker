@@ -5,6 +5,7 @@ import {
   events,
   fullSchedule,
 } from "./gtcData.js";
+import { Level, Event, Day, Timeslot, Coach, Rotation } from "./model.js";
 import express from "express";
 import morgan from "morgan";
 import ViteExpress from "vite-express";

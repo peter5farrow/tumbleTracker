@@ -1,0 +1,122 @@
+[
+  {
+    "levelCode": "pre3A",
+    "levelName": "Preschool 3 A"
+  },
+  {
+    "levelCode": "pre3B",
+    "levelName": "Preschool 3 B"
+  },
+  {
+    "levelCode": "pre45A",
+    "levelName": "Preschool 4/5 A"
+  },
+  {
+    "levelCode": "pre45B",
+    "levelName": "Preschool 4/5 B"
+  },
+  {
+    "levelCode": "whiteRibA",
+    "levelName": "White Ribbon A"
+  },
+  {
+    "levelCode": "whiteRibB",
+    "levelName": "White Ribbon B"
+  },
+  {
+    "levelCode": "redRibA",
+    "levelName": "Red Ribbon A"
+  },
+  {
+    "levelCode": "redRibB",
+    "levelName": "Red Ribbon B"
+  },
+  {
+    "levelCode": "blueRibA",
+    "levelName": "Blue Ribbon A"
+  },
+  {
+    "levelCode": "blueRibB",
+    "levelName": "Blue Ribbon B"
+  },
+  {
+    "levelCode": "bronzeMedA",
+    "levelName": "Bronze Medal A"
+  },
+  {
+    "levelCode": "bronzeMedB",
+    "levelName": "Bronze Medal B"
+  },
+  {
+    "levelCode": "silvMedA",
+    "levelName": "Silver Medal A"
+  },
+  {
+    "levelCode": "silvMedB",
+    "levelName": "Silver Medal B"
+  },
+  {
+    "levelCode": "begBoys",
+    "levelName": "Beginner Boys"
+  },
+  {
+    "levelCode": "intBoys",
+    "levelName": "Intermediate Boys"
+  },
+  {
+    "levelCode": "begTumb",
+    "levelName": "Beginner Tumbling"
+  },
+  {
+    "levelCode": "intTumb",
+    "levelName": "Intermediate Tumbling"
+  },
+  {
+    "levelCode": "cheerTumb",
+    "levelName": "Cheer Tumbling"
+  },
+  {
+    "levelCode": "airAware",
+    "levelName": "Air Awareness"
+  },
+  {
+    "levelCode": "hotShotFoun",
+    "levelName": "Hot Shots Foundations"
+  },
+  {
+    "levelCode": "hotShotAdv",
+    "levelName": "Hot Shots Advanced"
+  },
+  {
+    "levelCode": "hotTots",
+    "levelName": "Hot Tots"
+  },
+  {
+    "levelCode": "xcelA",
+    "levelName": "XCEL A"
+  },
+  {
+    "levelCode": "xcelSilver",
+    "levelName": "XCEL Silver"
+  },
+  {
+    "levelCode": "xcelGold",
+    "levelName": "XCEL Gold"
+  },
+  {
+    "levelCode": "level3",
+    "levelName": "Level 3"
+  },
+  {
+    "levelCode": "level4",
+    "levelName": "Level 4"
+  },
+  {
+    "levelCode": "optionalA",
+    "levelName": "Optional A"
+  },
+  {
+    "levelCode": "optionalB",
+    "levelName": "Optional B"
+  }
+]

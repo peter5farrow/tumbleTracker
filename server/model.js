@@ -15,8 +15,8 @@ export class Level extends Model {
 }
 Level.init(
   {
-    levelId: {
-      type: DataTypes.INTEGER,
+    levelCode: {
+      type: DataTypes.STRING,
       primaryKey: true,
     },
     levelName: {
@@ -36,8 +36,8 @@ export class Event extends Model {
 }
 Event.init(
   {
-    eventId: {
-      type: DataTypes.INTEGER,
+    eventCode: {
+      type: DataTypes.STRING,
       primaryKey: true,
     },
     eventName: {
@@ -57,8 +57,8 @@ export class Day extends Model {
 }
 Day.init(
   {
-    dayId: {
-      type: DataTypes.INTEGER,
+    dayCode: {
+      type: DataTypes.STRING,
       primaryKey: true,
     },
     dayName: {
@@ -102,12 +102,9 @@ export class Coach extends Model {
 }
 Coach.init(
   {
-    coachId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-    },
     coachName: {
       type: DataTypes.STRING,
+      primaryKey: true,
     },
   },
   {
@@ -127,21 +124,6 @@ Rotation.init(
       type: DataTypes.INTEGER,
       primaryKey: true,
     },
-    levelId: {
-      type: DataTypes.INTEGER,
-    },
-    eventId: {
-      type: DataTypes.INTEGER,
-    },
-    dayId: {
-      type: DataTypes.INTEGER,
-    },
-    timeslotId: {
-      type: DataTypes.INTEGER,
-    },
-    coachId: {
-      type: DataTypes.INTEGER,
-    },
   },
   {
     modelName: "rotation",
@@ -149,16 +131,20 @@ Rotation.init(
   }
 );
 
-Level.hasMany(Rotation, { foreignKey: "levelId" });
-Rotation.belongsTo(Level, { foreignKey: "levelId" });
-Event.hasMany(Rotation, { foreignKey: "eventId" });
-Rotation.belongsTo(Event, { foreignKey: "eventId" });
-Day.hasMany(Rotation, { foreignKey: "dayId" });
-Rotation.belongsTo(Day, { foreignKey: "dayId" });
+Level.hasMany(Rotation, { foreignKey: "levelCode" });
+Rotation.belongsTo(Level, { foreignKey: "levelCode" });
+
+Event.hasMany(Rotation, { foreignKey: "eventCode" });
+Rotation.belongsTo(Event, { foreignKey: "eventCode" });
+
+Day.hasMany(Rotation, { foreignKey: "dayCode" });
+Rotation.belongsTo(Day, { foreignKey: "dayCode" });
+
 Timeslot.hasMany(Rotation, { foreignKey: "timeslotId" });
 Rotation.belongsTo(Timeslot, { foreignKey: "timeslotId" });
-Coach.hasMany(Rotation, { foreignKey: "coachId" });
-Rotation.belongsTo(Coach, { foreignKey: "coachId" });
+
+Coach.hasMany(Rotation, { foreignKey: "coachName" });
+Rotation.belongsTo(Coach, { foreignKey: "coachName" });
 
 // Only execute if this file is run directly
 if (process.argv[1] === url.fileURLToPath(import.meta.url)) {

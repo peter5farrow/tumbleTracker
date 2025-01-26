@@ -1,0 +1,50 @@
+[
+  {
+    "dayCode": "monA",
+    "dayName": "Monday A"
+  },
+  {
+    "dayCode": "monB",
+    "dayName": "Monday B"
+  },
+  {
+    "dayCode": "tuesA",
+    "dayName": "Tuesday A"
+  },
+  {
+    "dayCode": "tuesB",
+    "dayName": "Tuesday B"
+  },
+  {
+    "dayCode": "wedA",
+    "dayName": "Wednesday A"
+  },
+  {
+    "dayCode": "wedB",
+    "dayName": "Wednesday B"
+  },
+  {
+    "dayCode": "thursA",
+    "dayName": "Thursday A"
+  },
+  {
+    "dayCode": "thursB",
+    "dayName": "Thursday B"
+  },
+  {
+    "dayCode": "friA",
+    "dayName": "Friday A"
+  },
+  {
+    "dayCode": "friB",
+    "dayName": "Friday B"
+  },
+  {
+    "dayCode": "satA",
+    "dayName": "Saturday A"
+  },
+  {
+    "dayCode": "satB",
+    "dayName": "Saturday B"
+  }
+]
