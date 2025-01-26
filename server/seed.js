@@ -1,4 +1,4 @@
-import { Level, Event, Day, Timeslot, Coach, Rotation, db } from "./model";
+import { Level, Event, Day, Timeslot, Coach, Rotation, db } from "./model.js";
 import levels from "./data/levels.json" assert { type: "json" };
 import events from "./data/events.json" assert { type: "json" };
 import days from "./data/days.json" assert { type: "json" };
