@@ -1,50 +1,62 @@
 [
   {
     "dayCode": "monA",
-    "dayName": "Monday A"
+    "dayName": "Monday A",
+    "levels": []
   },
   {
     "dayCode": "monB",
-    "dayName": "Monday B"
+    "dayName": "Monday B",
+    "levels": []
   },
   {
     "dayCode": "tuesA",
-    "dayName": "Tuesday A"
+    "dayName": "Tuesday A",
+    "levels": []
   },
   {
     "dayCode": "tuesB",
-    "dayName": "Tuesday B"
+    "dayName": "Tuesday B",
+    "levels": []
   },
   {
     "dayCode": "wedA",
-    "dayName": "Wednesday A"
+    "dayName": "Wednesday A",
+    "levels": []
   },
   {
     "dayCode": "wedB",
-    "dayName": "Wednesday B"
+    "dayName": "Wednesday B",
+    "levels": []
   },
   {
     "dayCode": "thursA",
-    "dayName": "Thursday A"
+    "dayName": "Thursday A",
+    "levels": []
   },
   {
     "dayCode": "thursB",
-    "dayName": "Thursday B"
+    "dayName": "Thursday B",
+    "levels": []
   },
   {
     "dayCode": "friA",
-    "dayName": "Friday A"
+    "dayName": "Friday A",
+    "levels": []
   },
   {
     "dayCode": "friB",
-    "dayName": "Friday B"
+    "dayName": "Friday B",
+    "levels": []
   },
   {
     "dayCode": "satA",
-    "dayName": "Saturday A"
+    "dayName": "Saturday A",
+    "levels": []
   },
   {
     "dayCode": "satB",
-    "dayName": "Saturday B"
+    "dayName": "Saturday B",
+    "levels": []
   }
 ]

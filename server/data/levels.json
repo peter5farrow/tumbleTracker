@@ -1,122 +1,182 @@
 [
   {
     "levelCode": "pre3A",
-    "levelName": "Preschool 3 A"
+    "levelName": "Preschool 3 A",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "pre3B",
-    "levelName": "Preschool 3 B"
+    "levelName": "Preschool 3 B",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "pre45A",
-    "levelName": "Preschool 4/5 A"
+    "levelName": "Preschool 4/5 A",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "pre45B",
-    "levelName": "Preschool 4/5 B"
+    "levelName": "Preschool 4/5 B",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "whiteRibA",
-    "levelName": "White Ribbon A"
+    "levelName": "White Ribbon A",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "whiteRibB",
-    "levelName": "White Ribbon B"
+    "levelName": "White Ribbon B",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "redRibA",
-    "levelName": "Red Ribbon A"
+    "levelName": "Red Ribbon A",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "redRibB",
-    "levelName": "Red Ribbon B"
+    "levelName": "Red Ribbon B",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "blueRibA",
-    "levelName": "Blue Ribbon A"
+    "levelName": "Blue Ribbon A",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "blueRibB",
-    "levelName": "Blue Ribbon B"
+    "levelName": "Blue Ribbon B",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "bronzeMedA",
-    "levelName": "Bronze Medal A"
+    "levelName": "Bronze Medal A",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "bronzeMedB",
-    "levelName": "Bronze Medal B"
+    "levelName": "Bronze Medal B",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "silvMedA",
-    "levelName": "Silver Medal A"
+    "levelName": "Silver Medal A",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "silvMedB",
-    "levelName": "Silver Medal B"
+    "levelName": "Silver Medal B",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "begBoys",
-    "levelName": "Beginner Boys"
+    "levelName": "Beginner Boys",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "intBoys",
-    "levelName": "Intermediate Boys"
+    "levelName": "Intermediate Boys",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "begTumb",
-    "levelName": "Beginner Tumbling"
+    "levelName": "Beginner Tumbling",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "intTumb",
-    "levelName": "Intermediate Tumbling"
+    "levelName": "Intermediate Tumbling",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "cheerTumb",
-    "levelName": "Cheer Tumbling"
+    "levelName": "Cheer Tumbling",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "airAware",
-    "levelName": "Air Awareness"
+    "levelName": "Air Awareness",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "hotShotFoun",
-    "levelName": "Hot Shots Foundations"
+    "levelName": "Hot Shots Foundations",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "hotShotAdv",
-    "levelName": "Hot Shots Advanced"
+    "levelName": "Hot Shots Advanced",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "hotTots",
-    "levelName": "Hot Tots"
+    "levelName": "Hot Tots",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "xcelA",
-    "levelName": "XCEL A"
+    "levelName": "XCEL A",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "xcelSilver",
-    "levelName": "XCEL Silver"
+    "levelName": "XCEL Silver",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "xcelGold",
-    "levelName": "XCEL Gold"
+    "levelName": "XCEL Gold",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "level3",
-    "levelName": "Level 3"
+    "levelName": "Level 3",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "level4",
-    "levelName": "Level 4"
+    "levelName": "Level 4",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "optionalA",
-    "levelName": "Optional A"
+    "levelName": "Optional A",
+    "coaches": [],
+    "times": {}
   },
   {
     "levelCode": "optionalB",
-    "levelName": "Optional B"
+    "levelName": "Optional B",
+    "coaches": [],
+    "times": {}
   }
 ]

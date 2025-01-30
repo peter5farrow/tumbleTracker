@@ -1,17 +1,9 @@
-import {
-  levelsList,
-  levelsInfo,
-  times,
-  events,
-  fullSchedule,
-} from "./gtcData.js";
-import { Level, Event, Day, Timeslot, Coach, Rotation } from "./model.js";
 import express from "express";
 import morgan from "morgan";
 import ViteExpress from "vite-express";
-import path from "path";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Define app and port
 const app = express();
@@ -111,62 +103,15 @@ function addEventToLevel(day, level, event, startTime, duration) {
   return { sched: fullSchedule[day], hasConflict: false };
 }
 
-// Testing
-
-const subset = [];
-for (let i = 0; i < levelsList.length / 2; i++) {
-  subset.push(levelsList[i]);
-}
-// addLevelsToDay(subset, "mondayA");
-
-// addEvent("mondayA", "pre3A", "vault", "5:30");
-// addEvent("mondayA", "redRibA", "floor", "2:35");
-// addEvent("mondayA", "bronzeMedA", "beam", "2:45");
-// addEvent("mondayA", "silverMedA", "bars", "4:30");
-// addEvent("mondayA", "pre3B", "vault", "5:25");
-
 // Routes
-app.get("/api/schedule", (req, res) => {
-  res.send(fullSchedule);
-});
-
-app.get("/api/days", (req, res) => {
-  res.send(Object.keys(fullSchedule));
-});
-
-app.get("/api/levels", (req, res) => {
-  res.send(levelsList);
-});
-
-app.get("/api/times", (req, res) => {
-  res.send(times);
-});
-
-app.get("/api/events", (req, res) => {
-  res.send(events);
-});
-
-app.get("/api/day:day", (req, res) => {
-  const { day } = req.params;
-  res.json(fullSchedule[day]);
-});
 
 //
-
-app.put("/api/add-levels", (req, res) => {
-  const { levels, day } = req.body;
-  addLevelsToDay(levels, day);
-  res.json({ isAdded: true });
-});
-
-app.put("/api/add-event", (req, res) => {
-  const { day, level, event, startTime, duration } = req.body;
-  const sched = addEventToLevel(day, level, event, startTime, duration);
-  res.json(sched);
-});
-
-//
-
-ViteExpress.listen(app, port, () =>
-  console.log(`Server is listening on http://localhost:${port}`)
-);
+if (process.env.NODE_ENV === "development") {
+  ViteExpress.listen(app, port, () =>
+    console.log(`Server is listening on http://localhost:${port}`)
+  );
+} else {
+  app.listen(port, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}

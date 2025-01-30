@@ -1,62 +1,65 @@
-import { Level, Event, Day, Timeslot, Coach, Rotation, db } from "./model.js";
+import { Level, Event, Day, Coach, db } from "./model.js";
 import levels from "./data/levels.json" assert { type: "json" };
 import events from "./data/events.json" assert { type: "json" };
 import days from "./data/days.json" assert { type: "json" };
 import coaches from "./data/coaches.json" assert { type: "json" };
+import times from "./data/times.json" assert { type: "json" };
+import mongoose from "mongoose";
 
 console.log("Syncing database...");
-await db.sync({ force: true });
+
+// Drop the 'Level' collection to clear data
+console.log("Dropping collections...");
+await Level.deleteMany({});
+await Event.deleteMany({});
+await Day.deleteMany({});
+await Coach.deleteMany({});
 
 console.log("Seeding database...");
 
-const levelsInDB = await Promise.all(
+const levelsInDB = await Level.insertMany(
   levels.map((level) => {
-    const { levelCode, levelName } = level;
+    const { levelCode, levelName, coaches } = level;
 
-    const newLevel = Level.create({
+    return {
       levelCode,
       levelName,
-    });
-
-    return newLevel;
+      coaches,
+      times,
+    };
   })
 );
 
-const eventsInDB = await Promise.all(
+const eventsInDB = await Event.insertMany(
   events.map((event) => {
     const { eventCode, eventName } = event;
 
-    const newEvent = Event.create({
+    return {
       eventCode,
       eventName,
-    });
-
-    return newEvent;
+    };
   })
 );
 
-const daysInDB = await Promise.all(
+const daysInDB = await Day.insertMany(
   days.map((day) => {
-    const { dayCode, dayName } = day;
+    const { dayCode, dayName, levels } = day;
 
-    const newDay = Day.create({
+    return {
       dayCode,
       dayName,
-    });
-
-    return newDay;
+      levels,
+    };
   })
 );
 
-const coachesInDB = await Promise.all(
+const coachesInDB = await Coach.insertMany(
   coaches.map((coach) => {
     const { coachName } = coach;
 
-    const newCoach = Coach.create({
+    return {
       coachName,
-    });
-
-    return newCoach;
+    };
   })
 );
 
@@ -66,5 +69,5 @@ console.log(eventsInDB);
 console.log(daysInDB);
 console.log(coachesInDB);
 
-await db.close();
+await mongoose.disconnect();
 console.log("Finished seeding database!");
