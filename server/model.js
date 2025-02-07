@@ -17,6 +17,7 @@ export const Day = mongoose.model("Day", DaySchema);
 const LevelSchema = new mongoose.Schema({
   levelCode: { type: String, required: true },
   levelName: String,
+  coaches: Array,
   times: Object,
 });
 export const Level = mongoose.model("Level", LevelSchema);

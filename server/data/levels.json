@@ -128,7 +128,7 @@
   {
     "levelCode": "hotShotAdv",
     "levelName": "Hot Shots Advanced",
-    "coaches": [],
+    "coaches": ["Courtney"],
     "times": {}
   },
   {
