@@ -12,44 +12,46 @@ export default function Calendar({ day, times }) {
     const cells = [];
 
     for (const level of day.levels) {
-      if (level[time] === "recVault") {
+      if (level.times[time] === "recVault") {
         cells.push(
           <td
             key={`${time}${level.levelCode}`}
             style={{ backgroundColor: "lightgreen" }}
           >
-            {level[time]}
+            {level.times[time]}
           </td>
         );
-      } else if (level[time] === "recBars") {
+      } else if (level.times[time] === "recBars") {
         cells.push(
           <td
             key={`${time}${level.levelCode}`}
             style={{ backgroundColor: "lightblue" }}
           >
-            {level[time]}
+            {level.times[time]}
           </td>
         );
-      } else if (level[time] === "recBeam") {
+      } else if (level.times[time] === "recBeam") {
         cells.push(
           <td
             key={`${time}${level.levelCode}`}
             style={{ backgroundColor: "lightpink" }}
           >
-            {level[time]}
+            {level.times[time]}
           </td>
         );
-      } else if (level[time] === "recFloorA") {
+      } else if (level.times[time] === "recFloorA") {
         cells.push(
           <td
             key={`${time}${level.levelCode}`}
             style={{ backgroundColor: "gold" }}
           >
-            {level[time]}
+            {level.times[time]}
           </td>
         );
       } else {
-        cells.push(<td key={`${time}${level.levelCode}`}>{level[time]}</td>);
+        cells.push(
+          <td key={`${time}${level.levelCode}`}>{level.times[time]}</td>
+        );
       }
     }
 

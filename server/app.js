@@ -78,6 +78,16 @@ app.get("/api/day/:inputDay", async (req, res) => {
   }
 });
 
+app.get("/api/eventName/:inputEvent", async (req, res) => {
+  try {
+    const { inputEvent } = req.params;
+    const event = await Event.findOne({ eventCode: inputEvent });
+    res.send(event.eventName);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // PUT
 app.put("/api/add-levels", async (req, res) => {
   const { day, levels } = req.body;

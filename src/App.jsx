@@ -26,8 +26,8 @@ function App() {
     fetchDayObject();
   }, [inputDay]);
 
-  const [inputLevel, setInputLevel] = useState("pre3A");
-  const [inputEvent, setInputEvent] = useState(eventOptions.data[0]);
+  const [inputLevel, setInputLevel] = useState(levelOptions.data[0].levelCode);
+  const [inputEvent, setInputEvent] = useState(eventOptions.data[0].eventCode);
   const [inputStartTime, setInputStartTime] = useState(timeOptions.data[0]);
   const [inputDuration, setInputDuration] = useState(10);
 
@@ -52,20 +52,21 @@ function App() {
     setInputDuration(e.target.value);
   };
   const handleAddEvent = async (e) => {
-    e.preventDefault();
-    const res = await axios.put("/api/add-event", {
-      day: inputDay,
-      level: inputLevel,
-      event: inputEvent,
-      startTime: inputStartTime,
-      duration: inputDuration,
-    });
+    try {
+      e.preventDefault();
+      const res = await axios.put("/api/add-event", {
+        day: inputDay,
+        level: inputLevel,
+        event: inputEvent,
+        startTime: inputStartTime,
+        duration: inputDuration,
+      });
 
-    if (res.data.hasConflict) {
-      alert(`Error: ${inputEvent} in use at selected time.`);
+      setToday(res.data);
+    } catch (err) {
+      const conflictedEvent = await axios.get(`/api/eventName/${inputEvent}`);
+      alert(`Error: ${conflictedEvent.data} in use at selected time.`);
     }
-    console.log(res.data);
-    setToday(res.data);
   };
 
   return (

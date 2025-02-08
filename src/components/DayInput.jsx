@@ -2,7 +2,7 @@ export default function DayInput({ days, inputDay, handleDayChange }) {
   const dayOptions = days.map((day) => {
     return (
       <option key={day.dayCode} value={day.dayCode}>
-        {day.dayCode}
+        {day.dayName}
       </option>
     );
   });
