@@ -1,9 +1,7 @@
-import axios from "axios";
-
 export default function Calendar({ day, times }) {
   // Headers
-  const levelHeaders = Object.keys(day).map((level) => {
-    return <th key={level}>{level}</th>;
+  const levelHeaders = day.levels.map((level) => {
+    return <th key={level.levelCode}>{level.levelName}</th>;
   });
 
   // BUG ALERT! If the same group changes events at a certain time, remove all of the previous event, not just the overlapping slots.
@@ -13,33 +11,45 @@ export default function Calendar({ day, times }) {
   for (const time of times) {
     const cells = [];
 
-    for (const level in day) {
-      if (day[level][time] === "recVault") {
+    for (const level of day.levels) {
+      if (level[time] === "recVault") {
         cells.push(
-          <td key={`${time}${level}`} style={{ backgroundColor: "lightgreen" }}>
-            {day[level][time]}
+          <td
+            key={`${time}${level.levelCode}`}
+            style={{ backgroundColor: "lightgreen" }}
+          >
+            {level[time]}
           </td>
         );
-      } else if (day[level][time] === "recBars") {
+      } else if (level[time] === "recBars") {
         cells.push(
-          <td key={`${time}${level}`} style={{ backgroundColor: "lightblue" }}>
-            {day[level][time]}
+          <td
+            key={`${time}${level.levelCode}`}
+            style={{ backgroundColor: "lightblue" }}
+          >
+            {level[time]}
           </td>
         );
-      } else if (day[level][time] === "recBeam") {
+      } else if (level[time] === "recBeam") {
         cells.push(
-          <td key={`${time}${level}`} style={{ backgroundColor: "lightpink" }}>
-            {day[level][time]}
+          <td
+            key={`${time}${level.levelCode}`}
+            style={{ backgroundColor: "lightpink" }}
+          >
+            {level[time]}
           </td>
         );
-      } else if (day[level][time] === "recFloorA") {
+      } else if (level[time] === "recFloorA") {
         cells.push(
-          <td key={`${time}${level}`} style={{ backgroundColor: "gold" }}>
-            {day[level][time]}
+          <td
+            key={`${time}${level.levelCode}`}
+            style={{ backgroundColor: "gold" }}
+          >
+            {level[time]}
           </td>
         );
       } else {
-        cells.push(<td key={`${time}${level}`}>{day[level][time]}</td>);
+        cells.push(<td key={`${time}${level.levelCode}`}>{level[time]}</td>);
       }
     }
 

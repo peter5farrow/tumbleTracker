@@ -1,39 +1,28 @@
 import { useEffect, useState } from "react";
 import Calendar from "./components/Calendar";
 import DayInput from "./components/DayInput";
-import LevelInput from "./components/AddEventWindow/LevelInput";
-import EventInput from "./components/AddEventWindow/EventInput";
 import axios from "axios";
-import StartTimeInput from "./components/AddEventWindow/StartTimeInput";
 import LevelCheckboxes from "./components/LevelCheckboxes";
-import DurationInput from "./components/AddEventWindow/DurationInput";
 import AddEventWindow from "./components/AddEventWindow/AddEventWindow";
+import LevelInput from "./components/AddEventWindow/LevelInput";
 
-const schedule = await axios.get("/api/schedule");
 const dayOptions = await axios.get("/api/days");
 const levelOptions = await axios.get("/api/levels");
 const eventOptions = await axios.get("/api/events");
 const timeOptions = await axios.get("/api/times");
+const coachOptions = await axios.get("/api/coaches");
+const testInputDay = await axios.get("/api/day/monA");
 
 function App() {
-  useEffect(() => {
-    const runDemo = async () => {
-      const res = await axios.put("/api/add-levels", {
-        levels: ["pre3A", "pre3B", "pre45A", "pre45B"],
-        day: "mondayA",
-      });
-    };
-    runDemo();
-  }, []);
-
-  const [inputDay, setInputDay] = useState("mondayA");
-  const [today, setToday] = useState({});
+  const [inputDay, setInputDay] = useState("monA");
+  const [today, setToday] = useState(testInputDay.data);
 
   useEffect(() => {
     const fetchDayObject = async () => {
-      const res = await axios.get(`/api/day${inputDay}`);
+      const res = await axios.get(`/api/day/${inputDay}`);
       setToday(res.data);
     };
+
     fetchDayObject();
   }, [inputDay]);
 
@@ -41,6 +30,10 @@ function App() {
   const [inputEvent, setInputEvent] = useState(eventOptions.data[0]);
   const [inputStartTime, setInputStartTime] = useState(timeOptions.data[0]);
   const [inputDuration, setInputDuration] = useState(10);
+
+  //
+  // fix werid eseEffect rendering thing
+  //
 
   // Event handlers
   const handleDayChange = (e) => {
@@ -71,7 +64,8 @@ function App() {
     if (res.data.hasConflict) {
       alert(`Error: ${inputEvent} in use at selected time.`);
     }
-    setToday(res.data.sched);
+    console.log(res.data);
+    setToday(res.data);
   };
 
   return (
@@ -83,12 +77,13 @@ function App() {
       />
       <AddEventWindow
         today={today}
+        levelOptions={levelOptions.data}
         inputLevel={inputLevel}
         handleLevelChange={handleLevelChange}
-        eventOptions={eventOptions}
+        eventOptions={eventOptions.data}
         inputEvent={inputEvent}
         handleEventChange={handleEventChange}
-        timeOptions={timeOptions}
+        timeOptions={timeOptions.data}
         handleStartTimeChange={handleStartTimeChange}
         inputDuration={inputDuration}
         handleDurationChange={handleDurationChange}

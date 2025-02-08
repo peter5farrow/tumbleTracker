@@ -1,8 +1,8 @@
 export default function EventInput({ events, inputEvent, handleEventChange }) {
   const eventOptions = events.map((event) => {
     return (
-      <option key={event} value={event}>
-        {event}
+      <option key={event.eventCode} value={event.eventCode}>
+        {event.eventName}
       </option>
     );
   });

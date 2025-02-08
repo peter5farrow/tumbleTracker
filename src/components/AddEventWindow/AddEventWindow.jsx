@@ -26,13 +26,13 @@ export default function AddEventWindow({
         />
 
         <EventInput
-          events={eventOptions.data}
+          events={eventOptions}
           inputEvent={inputEvent}
           handleEventChange={handleEventChange}
         />
 
         <StartTimeInput
-          times={timeOptions.data}
+          times={timeOptions}
           handleStartTimeChange={handleStartTimeChange}
         />
 
