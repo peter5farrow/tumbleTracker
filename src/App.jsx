@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Calendar from "./components/Calendar";
-import DayInput from "./components/DayInput";
+import Calendar from "./pages/CalendarPage/Calendar";
+import DayInput from "./pages/CalendarPage/components/DayInput";
 import axios from "axios";
-import LevelCheckboxes from "./components/LevelCheckboxes";
-import AddEventWindow from "./components/AddEventWindow/AddEventWindow";
-import LevelInput from "./components/AddEventWindow/LevelInput";
+import LevelCheckboxes from "./pages/EditDataPage/components/LevelCheckboxes";
+import AddEventWindow from "./pages/AddEventWindow/AddEventWindow";
+import LevelInput from "./pages/AddEventWindow/components/LevelInput";
 
 const dayOptions = await axios.get("/api/days");
 const levelOptions = await axios.get("/api/levels");
@@ -65,6 +65,7 @@ function App() {
       setToday(res.data);
     } catch (err) {
       const conflictedEvent = await axios.get(`/api/eventName/${inputEvent}`);
+
       alert(`Error: ${conflictedEvent.data} in use at selected time.`);
     }
   };

@@ -1,7 +1,7 @@
-import DurationInput from "./DurationInput";
-import EventInput from "./EventInput";
-import LevelInput from "./LevelInput";
-import StartTimeInput from "./StartTimeInput";
+import DurationInput from "./components/DurationInput";
+import EventInput from "./components/EventInput";
+import LevelInput from "./components/LevelInput";
+import StartTimeInput from "./components/StartTimeInput";
 
 export default function AddEventWindow({
   today,

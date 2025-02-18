@@ -92,7 +92,7 @@ app.get("/api/eventName/:inputEvent", async (req, res) => {
 app.put("/api/add-levels", async (req, res) => {
   const { day, levels } = req.body;
 
-  // figure out sorting later
+  // *Figure out sorting later
   const levelsArr = [];
   for (const level of levels) {
     levelsArr.push(await Level.findOne({ levelCode: level }));
@@ -122,25 +122,46 @@ app.put("/api/add-event", async (req, res) => {
 
   try {
     const thisDay = await Day.findOne({ dayCode: day });
-    console.log(thisDay);
-
     const levelIndex = thisDay.levels.findIndex(
       (obj) => obj.levelCode === level
     );
-    console.log(levelIndex);
-    // let levelIndex = 1; // You can adjust this based on the actual logic to find the level index
-
     const timeKeys = Object.keys(thisDay["levels"][levelIndex]["times"]);
     const startIndex = timeKeys.indexOf(startTime);
+    const rotationTimes = [];
+    for (
+      let i = startIndex;
+      i < startIndex + duration / 5 && i < timeKeys.length;
+      i++
+    ) {
+      rotationTimes.push(timeKeys[i]);
+    }
     let hasConflict = false;
 
-    for (const eachLevel of thisDay.levels) {
-      for (
-        let i = startIndex;
-        i < startIndex + duration / 5 && i < timeKeys.length;
-        i++
+    // Deletes other events if reassigning a certain level. It does have the bug of deleting all other instances of events with conflicts. Check on this later.
+    const conflictedEvents = [];
+
+    for (const key of rotationTimes) {
+      if (
+        thisDay["levels"][levelIndex]["times"][key] &&
+        !conflictedEvents.includes(thisDay["levels"][levelIndex]["times"][key])
       ) {
-        const key = timeKeys[i];
+        conflictedEvents.push(thisDay["levels"][levelIndex]["times"][key]);
+      }
+    }
+    // console.log(conflictedEvents);
+
+    conflictedEvents.forEach((confEvt) => {
+      for (const eachTime in thisDay["levels"][levelIndex]["times"]) {
+        if (thisDay["levels"][levelIndex]["times"][eachTime] === confEvt) {
+          thisDay["levels"][levelIndex]["times"][eachTime] = "";
+        }
+      }
+    });
+
+    //
+
+    for (const eachLevel of thisDay.levels) {
+      for (const key of rotationTimes) {
         if (eachLevel.times[key] === event) {
           hasConflict = true;
         }
@@ -153,12 +174,8 @@ app.put("/api/add-event", async (req, res) => {
         .json({ error: "Event conflict detected", day: thisDay });
     }
 
-    for (
-      let i = startIndex;
-      i < startIndex + duration / 5 && i < timeKeys.length;
-      i++
-    ) {
-      const key = timeKeys[i];
+    for (const key of rotationTimes) {
+      // This updates the cells
       thisDay.levels[levelIndex].times[key] = event;
     }
 
