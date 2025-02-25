@@ -1,3 +1,3 @@
 export default function EditDataButton() {
-  return;
+  return <button>Edit Data</button>;
 }

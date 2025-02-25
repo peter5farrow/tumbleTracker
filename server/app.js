@@ -135,6 +135,7 @@ app.put("/api/add-event", async (req, res) => {
     ) {
       rotationTimes.push(timeKeys[i]);
     }
+
     let hasConflict = false;
 
     // Deletes other events if reassigning a certain level. It does have the bug of deleting all other instances of events with conflicts. Check on this later.
@@ -148,7 +149,7 @@ app.put("/api/add-event", async (req, res) => {
         conflictedEvents.push(thisDay["levels"][levelIndex]["times"][key]);
       }
     }
-    // console.log(conflictedEvents);
+    console.log(conflictedEvents);
 
     conflictedEvents.forEach((confEvt) => {
       for (const eachTime in thisDay["levels"][levelIndex]["times"]) {

@@ -45,15 +45,15 @@ export default function LevelCheckboxes({ levels, day }) {
 
   const levelOptions = levels.map((level) => {
     return (
-      <label key={level}>
+      <label key={level.levelCode}>
         <input
           type="checkbox"
-          name={level}
-          value={level}
-          checked={selectedLevels.includes(level)}
+          name={level.levelCode}
+          value={level.levelCode}
+          checked={selectedLevels.includes(level.levelCode)}
           onChange={handleChange}
         />
-        {level}
+        {level.levelName}
       </label>
     );
   });

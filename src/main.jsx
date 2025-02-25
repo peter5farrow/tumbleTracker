@@ -8,9 +8,17 @@ import {
   createRoutesFromElements,
   RouterProvider,
 } from "react-router-dom";
+import EditDataPage from "./pages/EditDataPage/EditDataPage.jsx";
+import Calendar from "./pages/CalendarPage/CalendarPage.jsx";
 
 const router = createBrowserRouter(
-  createRoutesFromElements(<Route path="/" element={<App />}></Route>)
+  createRoutesFromElements(
+    <Route path="/" element={<App />}>
+      <Route index element={<Calendar />} />
+      <Route path="/calendar" element={<Calendar />} />
+      <Route path="/editData" element={<EditDataPage />} />
+    </Route>
+  )
 );
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
