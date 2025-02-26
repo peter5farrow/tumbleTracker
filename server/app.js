@@ -184,7 +184,6 @@ app.put("/api/add-event", async (req, res) => {
     thisDay.markModified(`levels.${levelIndex}.times`);
 
     const updatedDay = await thisDay.save();
-
     res.status(201).json(updatedDay);
   } catch (error) {
     console.error("Error saving day:", error);

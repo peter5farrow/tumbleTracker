@@ -9,7 +9,7 @@ const levelOptions = await axios.get("/api/levels");
 const eventOptions = await axios.get("/api/events");
 const timeOptions = await axios.get("/api/times");
 
-export default function AddEventWindow({ today, onClose }) {
+export default function AddEventWindow({ today, setToday, onClose }) {
   const [inputLevel, setInputLevel] = useState(levelOptions.data[0].levelCode);
   const [inputEvent, setInputEvent] = useState(eventOptions.data[0].eventCode);
   const [inputStartTime, setInputStartTime] = useState(timeOptions.data[0]);
@@ -40,9 +40,19 @@ export default function AddEventWindow({ today, onClose }) {
 
       setToday(res.data);
     } catch (err) {
-      const conflictedEvent = await axios.get(`/api/eventName/${inputEvent}`);
-
-      alert(`Error: ${conflictedEvent.data} in use at selected time.`);
+      if (err.response) {
+        if (err.response.status === 409) {
+          const conflictedEvent = await axios.get(
+            `/api/eventName/${inputEvent}`
+          );
+          alert(`Error: ${conflictedEvent.data} in use at selected time.`);
+        } else {
+          alert(`Unexpected error: ${err.response.status}`);
+        }
+      } else {
+        console.error(err);
+        alert("Unknown error occurred.");
+      }
     }
   };
 
