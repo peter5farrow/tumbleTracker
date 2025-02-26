@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import AddEventButton from "./components/AddEventButton.jsx";
 import AddEventWindow from "../AddEventWindow/AddEventWindow.jsx";
 import DayInput from "./components/DayInput.jsx";
+import EditDataButton from "./components/EditDataButton.jsx";
 
 const dayOptions = await axios.get("/api/days");
 const timeOptions = await axios.get("/api/times");
 const testInputDay = await axios.get("/api/day/monA");
 
 export default function Calendar() {
+  const navigate = useNavigate();
+
   const [inputDay, setInputDay] = useState("monA");
   const [today, setToday] = useState(testInputDay.data);
 
@@ -26,14 +29,10 @@ export default function Calendar() {
     setInputDay(e.target.value);
   };
 
-  // Headers
   const levelHeaders = today.levels.map((level) => {
     return <th key={level.levelCode}>{level.levelName}</th>;
   });
 
-  // BUG ALERT! If the same group changes events at a certain time, remove all of the previous event, not just the overlapping slots.
-
-  // Generating cells
   const rows = [];
   for (const time of timeOptions.data) {
     const cells = [];
@@ -95,11 +94,16 @@ export default function Calendar() {
   const handleAddingEvent = () => {
     setAddingEvent(!addingEvent);
   };
+  const handleEditingData = () => {
+    navigate("/editData");
+  };
 
   if (addingEvent) {
     return (
       <div width="90vw">
+        <EditDataButton onClick={handleEditingData} />
         <AddEventWindow
+          inputDay={inputDay}
           today={today}
           setToday={setToday}
           onClose={handleAddingEvent}
@@ -118,6 +122,7 @@ export default function Calendar() {
   } else {
     return (
       <div width="90vw">
+        <EditDataButton onClick={handleEditingData} />
         <DayInput
           days={dayOptions.data}
           inputDay={inputDay}

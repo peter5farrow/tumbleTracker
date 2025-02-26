@@ -1,3 +1,3 @@
-export default function EditDataButton() {
-  return <button>Edit Data</button>;
+export default function EditDataButton({ onClick }) {
+  return <button onClick={onClick}>Edit Data</button>;
 }

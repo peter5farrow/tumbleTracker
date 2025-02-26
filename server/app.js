@@ -122,9 +122,10 @@ app.put("/api/add-event", async (req, res) => {
 
   try {
     const thisDay = await Day.findOne({ dayCode: day });
-    const levelIndex = thisDay.levels.findIndex(
-      (obj) => obj.levelCode === level
+    const levelIndex = thisDay["levels"].findIndex(
+      (obj) => obj["levelCode"] === level
     );
+
     const timeKeys = Object.keys(thisDay["levels"][levelIndex]["times"]);
     const startIndex = timeKeys.indexOf(startTime);
     const rotationTimes = [];
@@ -138,7 +139,7 @@ app.put("/api/add-event", async (req, res) => {
 
     let hasConflict = false;
 
-    // Deletes other events if reassigning a certain level. It does have the bug of deleting all other instances of events with conflicts. Check on this later.
+    // *Deletes other events if reassigning a certain level. It does have the bug of deleting all other instances of events with conflicts. Check on this later.*
     const conflictedEvents = [];
 
     for (const key of rotationTimes) {
@@ -149,7 +150,6 @@ app.put("/api/add-event", async (req, res) => {
         conflictedEvents.push(thisDay["levels"][levelIndex]["times"][key]);
       }
     }
-    console.log(conflictedEvents);
 
     conflictedEvents.forEach((confEvt) => {
       for (const eachTime in thisDay["levels"][levelIndex]["times"]) {
@@ -176,7 +176,6 @@ app.put("/api/add-event", async (req, res) => {
     }
 
     for (const key of rotationTimes) {
-      // This updates the cells
       thisDay.levels[levelIndex].times[key] = event;
     }
 

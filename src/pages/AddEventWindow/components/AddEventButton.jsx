@@ -1,3 +1,3 @@
 export default function AddEventButton() {
-  return <button>Add Event</button>;
+  return <button id="addEventButton">Add Event</button>;
 }

@@ -1,16 +1,15 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DurationInput from "./components/DurationInput";
 import EventInput from "./components/EventInput";
 import LevelInput from "./components/LevelInput";
 import StartTimeInput from "./components/StartTimeInput";
 
-const levelOptions = await axios.get("/api/levels");
 const eventOptions = await axios.get("/api/events");
 const timeOptions = await axios.get("/api/times");
 
-export default function AddEventWindow({ today, setToday, onClose }) {
-  const [inputLevel, setInputLevel] = useState(levelOptions.data[0].levelCode);
+export default function AddEventWindow({ inputDay, today, setToday, onClose }) {
+  const [inputLevel, setInputLevel] = useState(today.levels[0].levelCode);
   const [inputEvent, setInputEvent] = useState(eventOptions.data[0].eventCode);
   const [inputStartTime, setInputStartTime] = useState(timeOptions.data[0]);
   const [inputDuration, setInputDuration] = useState(10);
@@ -31,13 +30,12 @@ export default function AddEventWindow({ today, setToday, onClose }) {
     try {
       e.preventDefault();
       const res = await axios.put("/api/add-event", {
-        day: today["dayCode"],
+        day: inputDay,
         level: inputLevel,
         event: inputEvent,
         startTime: inputStartTime,
         duration: inputDuration,
       });
-
       setToday(res.data);
     } catch (err) {
       if (err.response) {
@@ -84,6 +82,7 @@ export default function AddEventWindow({ today, setToday, onClose }) {
           Submit
         </button>
       </form>
+      <button onClick={onClose}>close</button>
     </div>
   );
 }
