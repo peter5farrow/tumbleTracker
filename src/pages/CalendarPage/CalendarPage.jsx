@@ -8,26 +8,27 @@ import EditDataButton from "./components/EditDataButton.jsx";
 
 const dayOptions = await axios.get("/api/days");
 const timeOptions = await axios.get("/api/times");
-const testInputDay = await axios.get("/api/day/monA");
+const demoDay = await axios.get("/api/day/monA");
 
 export default function Calendar() {
-  const navigate = useNavigate();
-
   const [inputDay, setInputDay] = useState("monA");
-  const [today, setToday] = useState(testInputDay.data);
+  const [today, setToday] = useState(demoDay.data);
 
   useEffect(() => {
-    const fetchDayObject = async () => {
+    const fetchDay = async () => {
       const res = await axios.get(`/api/day/${inputDay}`);
       setToday(res.data);
     };
-
-    fetchDayObject();
+    fetchDay();
   }, [inputDay]);
+
+  const navigate = useNavigate();
 
   const handleDayChange = (e) => {
     setInputDay(e.target.value);
   };
+
+  // *Figure out sorting later. It is currently sorted by when level was added, not the correct order.*
 
   const levelHeaders = today.levels.map((level) => {
     return <th key={level.levelCode}>{level.levelName}</th>;
@@ -107,6 +108,26 @@ export default function Calendar() {
           today={today}
           setToday={setToday}
           onClose={handleAddingEvent}
+        />
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              {levelHeaders}
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </table>
+      </div>
+    );
+  } else if (!addingEvent && today.levels.length === 0) {
+    return (
+      <div width="90vw">
+        <EditDataButton onClick={handleEditingData} />
+        <DayInput
+          days={dayOptions.data}
+          inputDay={inputDay}
+          handleDayChange={handleDayChange}
         />
         <table>
           <thead>

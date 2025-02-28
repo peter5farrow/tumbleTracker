@@ -1,7 +1,5 @@
-import { useEffect } from "react";
-
 export default function LevelCheckboxes({
-  levels,
+  levelOptions,
   selectedLevels,
   setSelectedLevels,
   handleSubmit,
@@ -15,7 +13,7 @@ export default function LevelCheckboxes({
     );
   };
 
-  const levelOptions = levels.map((level) => {
+  const levelBoxes = levelOptions.map((level) => {
     return (
       <label key={level.levelCode}>
         <input
@@ -33,7 +31,7 @@ export default function LevelCheckboxes({
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        {levelOptions}
+        {levelBoxes}
         <button type="submit">Submit</button>
       </form>
     </div>

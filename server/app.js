@@ -89,10 +89,9 @@ app.get("/api/eventName/:inputEvent", async (req, res) => {
 });
 
 // PUT
-app.put("/api/add-levels", async (req, res) => {
+app.put("/api/update-levels", async (req, res) => {
   const { day, levels } = req.body;
 
-  // *Figure out sorting later
   const levelsArr = [];
   for (const level of levels) {
     levelsArr.push(await Level.findOne({ levelCode: level }));
@@ -100,18 +99,9 @@ app.put("/api/add-levels", async (req, res) => {
   try {
     const thisDay = await Day.findOne({ dayCode: day });
 
-    if (!thisDay.levels) {
-      thisDay.levels = levelsArr;
-      const savedDay = await thisDay.save();
-      res.status(201).json(savedDay);
-    } else {
-      const thisDayLevels = [...thisDay.levels];
-      const allLevels = thisDayLevels.concat(levelsArr);
-      thisDay.levels = allLevels;
-      const savedDay = await thisDay.save();
-
-      res.status(201).json(savedDay);
-    }
+    thisDay.levels = levelsArr;
+    const savedDay = await thisDay.save();
+    res.status(201).json(savedDay);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -158,8 +148,6 @@ app.put("/api/add-event", async (req, res) => {
         }
       }
     });
-
-    //
 
     for (const eachLevel of thisDay.levels) {
       for (const key of rotationTimes) {
