@@ -55,7 +55,7 @@ export default function AddEventWindow({ inputDay, today, setToday, onClose }) {
   };
 
   return (
-    <div>
+    <div style={{ border: "2px solid lightgray", marginBottom: "2em" }}>
       <form action="/api/add-event">
         <LevelInput
           day={today}
@@ -82,7 +82,7 @@ export default function AddEventWindow({ inputDay, today, setToday, onClose }) {
           Submit
         </button>
       </form>
-      <button onClick={onClose}>close</button>
+      <button onClick={onClose}>X</button>
     </div>
   );
 }

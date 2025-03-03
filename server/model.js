@@ -6,11 +6,55 @@ dotenv.config();
 
 export const db = connectToDB(process.env.MONGO_URI);
 
-// Example Schema and Model
+// Schema and Models
 const DaySchema = new mongoose.Schema({
   dayCode: { type: String, required: true },
   dayName: String,
   levels: Array,
+});
+
+const levelOrder = [
+  "pre3A",
+  "pre3B",
+  "pre45A",
+  "pre45B",
+  "whiteRibA",
+  "whiteRibB",
+  "redRibA",
+  "redRibB",
+  "blueRibA",
+  "blueRibB",
+  "bronzeMedA",
+  "bronzeMedB",
+  "silvMedA",
+  "silvMedB",
+  "begBoys",
+  "intBoys",
+  "begTumb",
+  "intTumb",
+  "cheerTumb",
+  "airAware",
+  "hotShotFoun",
+  "hotShotAdv",
+  "hotTots",
+  "xcelA",
+  "xcelSilver",
+  "xcelGold",
+  "level3",
+  "level4",
+  "optionalA",
+  "optionalB",
+];
+
+DaySchema.pre("save", function (next) {
+  this.levels.sort((a, b) => {
+    const indexA = levelOrder.indexOf(a.levelCode);
+    const indexB = levelOrder.indexOf(b.levelCode);
+
+    if (indexA === -1 || indexB === -1) return 0;
+    return indexA - indexB;
+  });
+  next();
 });
 export const Day = mongoose.model("Day", DaySchema);
 

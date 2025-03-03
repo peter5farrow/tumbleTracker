@@ -41,7 +41,6 @@ export default function EditDataPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     const res = await axios.put("/api/update-levels", {
       day: inputDay,
       levels: selectedLevels,

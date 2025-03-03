@@ -102,15 +102,9 @@ app.put("/api/update-levels", async (req, res) => {
       for (const level of levels) {
         thisDay.levels.push(await Level.findOne({ levelCode: level }));
       }
-      const savedDay = await thisDay.save();
+      let savedDay = await thisDay.save();
       res.status(201).json(savedDay);
       return;
-    }
-
-    for (const level of thisDay.levels) {
-      if (!levels.includes(level.levelCode)) {
-        thisDay.levels.splice(thisDay.levels.indexOf(level), 1);
-      }
     }
 
     for (const level of levels) {
@@ -119,7 +113,14 @@ app.put("/api/update-levels", async (req, res) => {
       }
     }
 
-    const savedDay = await thisDay.save();
+    for (let i = thisDay.levels.length - 1; i >= 0; i--) {
+      const level = thisDay.levels[i];
+      if (!levels.includes(level.levelCode)) {
+        thisDay.levels.splice(i, 1);
+      }
+    }
+
+    let savedDay = await thisDay.save();
     res.status(201).json(savedDay);
   } catch (err) {
     res.status(400).json({ message: err.message });
