@@ -28,8 +28,7 @@ export default function Calendar() {
     setInputDay(e.target.value);
   };
 
-  // *Figure out sorting later. It is currently sorted by when level was added, not the correct order.*
-
+  // *Eventually switch to coachHeaders*
   const levelHeaders = today.levels.map((level) => {
     return <th key={level.levelCode}>{level.levelName}</th>;
   });
