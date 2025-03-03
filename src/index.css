@@ -14,11 +14,15 @@ body {
   min-height: 100vh;
   justify-content: center;
   text-align: center;
+  background-color: rgb(73, 112, 221);
+  color: white;
 }
 
 table {
   border: 2px solid black;
   border-collapse: collapse;
+  background-color: white;
+  color: black;
 }
 
 th,
