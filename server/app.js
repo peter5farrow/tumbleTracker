@@ -130,6 +130,19 @@ app.put("/api/update-levels", async (req, res) => {
 app.put("/api/add-event", async (req, res) => {
   const { day, level, event, startTime, duration } = req.body;
 
+  /*
+//check for conflict
+const timeslot = await Timeslot.findOne({})
+
+  const newRotation = await Rotation.create({
+  levelCode: level,
+  eventCode: event,
+  dayCode: day,
+  timeslotId: ***,
+  coachNames: ***
+  })
+  */
+
   try {
     const thisDay = await Day.findOne({ dayCode: day });
     const levelIndex = thisDay["levels"].findIndex(
