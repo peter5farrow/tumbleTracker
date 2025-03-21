@@ -1,78 +1,126 @@
-import mongoose from "mongoose";
+import { Model, DataTypes } from "sequelize";
+import util from "util";
 import connectToDB from "./db.js";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-export const db = connectToDB(process.env.MONGO_URI);
+export const db = await connectToDB(process.env.POSTGRES_URI);
 
-// Schema and Models
-const DaySchema = new mongoose.Schema({
-  dayCode: { type: String, required: true },
-  dayName: String,
-  levels: Array,
+// Models
+
+export class Day extends Model {
+  [util.inspect.custom]() {
+    return this.toJSON();
+  }
+}
+Day.init(
+  {
+    dayCode: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false,
+    },
+    dayName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    levels: {
+      type: DataTypes.JSONB, // JSONB can store an array of objects (level data)
+      allowNull: true,
+    },
+  },
+  {
+    hooks: {
+      beforeSave: (day) => {
+        const levelOrder = [
+          "pre3A",
+          "pre3B",
+          "pre45A",
+          "pre45B",
+          "whiteRibA",
+          "whiteRibB",
+          "redRibA",
+          "redRibB",
+          "blueRibA",
+          "blueRibB",
+          "bronzeMedA",
+          "bronzeMedB",
+          "silvMedA",
+          "silvMedB",
+          "begBoys",
+          "intBoys",
+          "begTumb",
+          "intTumb",
+          "cheerTumb",
+          "airAware",
+          "hotShotFoun",
+          "hotShotAdv",
+          "hotTots",
+          "xcelA",
+          "xcelSilver",
+          "xcelGold",
+          "level3",
+          "level4",
+          "optionalA",
+          "optionalB",
+        ];
+
+        if (day.levels && Array.isArray(day.levels)) {
+          day.levels.sort((a, b) => {
+            const indexA = levelOrder.indexOf(a.levelCode);
+            const indexB = levelOrder.indexOf(b.levelCode);
+
+            if (indexA === -1 || indexB === -1) return 0;
+            return indexA - indexB;
+          });
+        }
+      },
+    },
+  },
+  {
+    modelName: "day",
+    sequelize: db,
+  }
+);
+
+// continue updating...
+
+const Level = sequelize.define("Level", {
+  levelCode: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  levelName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  coaches: {
+    type: DataTypes.JSONB, // Array of coaches
+    allowNull: true,
+  },
+  times: {
+    type: DataTypes.JSONB, // Object to store times
+    allowNull: true,
+  },
 });
 
-const levelOrder = [
-  "pre3A",
-  "pre3B",
-  "pre45A",
-  "pre45B",
-  "whiteRibA",
-  "whiteRibB",
-  "redRibA",
-  "redRibB",
-  "blueRibA",
-  "blueRibB",
-  "bronzeMedA",
-  "bronzeMedB",
-  "silvMedA",
-  "silvMedB",
-  "begBoys",
-  "intBoys",
-  "begTumb",
-  "intTumb",
-  "cheerTumb",
-  "airAware",
-  "hotShotFoun",
-  "hotShotAdv",
-  "hotTots",
-  "xcelA",
-  "xcelSilver",
-  "xcelGold",
-  "level3",
-  "level4",
-  "optionalA",
-  "optionalB",
-];
-
-DaySchema.pre("save", function (next) {
-  this.levels.sort((a, b) => {
-    const indexA = levelOrder.indexOf(a.levelCode);
-    const indexB = levelOrder.indexOf(b.levelCode);
-
-    if (indexA === -1 || indexB === -1) return 0;
-    return indexA - indexB;
-  });
-  next();
+const Event = sequelize.define("Event", {
+  eventCode: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  eventName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
-export const Day = mongoose.model("Day", DaySchema);
 
-const LevelSchema = new mongoose.Schema({
-  levelCode: { type: String, required: true },
-  levelName: String,
-  coaches: Array,
-  times: Object,
+const Coach = sequelize.define("Coach", {
+  coachName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
-export const Level = mongoose.model("Level", LevelSchema);
 
-const EventSchema = new mongoose.Schema({
-  eventCode: { type: String, required: true },
-  eventName: String,
-});
-export const Event = mongoose.model("Event", EventSchema);
-
-const CoachSchema = new mongoose.Schema({
-  coachName: { type: String, required: true },
-});
-export const Coach = mongoose.model("Coach", CoachSchema);
+export { Day, Level, Event, Coach };

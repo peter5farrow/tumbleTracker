@@ -3,7 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import ViteExpress from "vite-express";
 import dotenv from "dotenv";
-import { Level, Event, Day, Coach, db } from "./model.js";
+import { Level, Event, Day, Coach } from "./model.js";
 import { times } from "./gtcData.js";
 
 dotenv.config();

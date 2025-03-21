@@ -4,20 +4,18 @@ import events from "./data/events.json" assert { type: "json" };
 import days from "./data/days.json" assert { type: "json" };
 import coaches from "./data/coaches.json" assert { type: "json" };
 import times from "./data/times.json" assert { type: "json" };
-import mongoose from "mongoose";
 
 console.log("Syncing database...");
 
-// Drop the 'Level' collection to clear data
-console.log("Dropping collections...");
-await Level.deleteMany({});
-await Event.deleteMany({});
-await Day.deleteMany({});
-await Coach.deleteMany({});
+console.log("Dropping tables...");
+await Level.destroy({ where: {}, truncate: true });
+await Event.destroy({ where: {}, truncate: true });
+await Day.destroy({ where: {}, truncate: true });
+await Coach.destroy({ where: {}, truncate: true });
 
 console.log("Seeding database...");
 
-const levelsInDB = await Level.insertMany(
+const levelsInDB = await Level.bulkCreate(
   levels.map((level) => {
     const { levelCode, levelName, coaches } = level;
 
@@ -30,7 +28,7 @@ const levelsInDB = await Level.insertMany(
   })
 );
 
-const eventsInDB = await Event.insertMany(
+const eventsInDB = await Event.bulkCreate(
   events.map((event) => {
     const { eventCode, eventName } = event;
 
@@ -41,7 +39,7 @@ const eventsInDB = await Event.insertMany(
   })
 );
 
-const daysInDB = await Day.insertMany(
+const daysInDB = await Day.bulkCreate(
   days.map((day) => {
     const { dayCode, dayName, levels } = day;
 
@@ -53,7 +51,7 @@ const daysInDB = await Day.insertMany(
   })
 );
 
-const coachesInDB = await Coach.insertMany(
+const coachesInDB = await Coach.bulkCreate(
   coaches.map((coach) => {
     const { coachName } = coach;
 
@@ -63,11 +61,9 @@ const coachesInDB = await Coach.insertMany(
   })
 );
 
-//for confirmation
 console.log(levelsInDB);
 console.log(eventsInDB);
 console.log(daysInDB);
 console.log(coachesInDB);
 
-await mongoose.disconnect();
 console.log("Finished seeding database!");
