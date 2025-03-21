@@ -152,25 +152,25 @@
   {
     "levelCode": "xcelGold",
     "levelName": "XCEL Gold",
-    "coaches": [],
+    "coaches": [{ "coachName": "Courtney" }],
     "times": {}
   },
   {
     "levelCode": "level3",
     "levelName": "Level 3",
-    "coaches": [],
+    "coaches": [{ "coachName": "Courtney" }],
     "times": {}
   },
   {
     "levelCode": "level4",
     "levelName": "Level 4",
-    "coaches": [],
+    "coaches": [{ "coachName": "Peyton" }],
     "times": {}
   },
   {
     "levelCode": "optionalA",
     "levelName": "Optional A",
-    "coaches": [],
+    "coaches": [{ "coachName": "Piper" }],
     "times": {}
   },
   {

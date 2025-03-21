@@ -28,10 +28,24 @@ export default function Calendar() {
     setInputDay(e.target.value);
   };
 
-  // *Eventually switch to coachHeaders*
-  const levelHeaders = today.levels.map((level) => {
-    return <th key={level.levelCode}>{level.levelName}</th>;
+  const coachesArray = [];
+
+  today.levels.forEach((level) => {
+    level.coaches.forEach((coach) => {
+      if (!coachesArray.includes(coach.coachName)) {
+        coachesArray.push(coach.coachName);
+      }
+    });
+    return;
   });
+
+  const coachHeaders = coachesArray.map((coach) => {
+    return <th key={coach}>{coach}</th>;
+  });
+
+  // const levelHeaders = today.levels.map((level) => {
+  //   return <th key={level.levelCode}>{level.levelName}</th>;
+  // });
 
   const rows = [];
   for (const time of timeOptions.data) {
@@ -112,7 +126,7 @@ export default function Calendar() {
           <thead>
             <tr>
               <th>Time</th>
-              {levelHeaders}
+              {coachHeaders}
             </tr>
           </thead>
           <tbody>{rows}</tbody>
@@ -132,7 +146,7 @@ export default function Calendar() {
           <thead>
             <tr>
               <th>Time</th>
-              {levelHeaders}
+              {coachHeaders}
             </tr>
           </thead>
           <tbody>{rows}</tbody>
@@ -153,7 +167,7 @@ export default function Calendar() {
           <thead>
             <tr>
               <th>Time</th>
-              {levelHeaders}
+              {coachHeaders}
             </tr>
           </thead>
           <tbody>{rows}</tbody>

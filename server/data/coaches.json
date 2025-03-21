@@ -1,1 +1,5 @@
-[{ "coachName": "Courtney" }]
+[
+  { "coachName": "Courtney" },
+  { "coachName": "Peyton" },
+  { "coachName": "Piper" }
+]
