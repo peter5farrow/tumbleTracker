@@ -1,4 +1,4 @@
-import { Model, DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import util from "util";
 import connectToDB from "./db.js";
 import dotenv from "dotenv";
@@ -26,7 +26,7 @@ Day.init(
       allowNull: true,
     },
     levels: {
-      type: DataTypes.JSONB, // JSONB can store an array of objects (level data)
+      type: DataTypes.ARRAY,
       allowNull: true,
     },
   },
@@ -84,43 +84,77 @@ Day.init(
   }
 );
 
-// continue updating...
+export class Level extends Model {
+  [util.inspect.custom]() {
+    return this.toJSON();
+  }
+}
+Level.init(
+  {
+    levelCode: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false,
+    },
+    levelName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    coaches: {
+      type: DataTypes.ARRAY,
+      allowNull: true,
+    },
+    times: {
+      type: DataTypes.JSONB, // Object to store times
+      allowNull: true,
+    },
+  },
+  {
+    modelName: "level",
+    sequelize: db,
+  }
+);
 
-const Level = sequelize.define("Level", {
-  levelCode: {
-    type: DataTypes.STRING,
-    allowNull: false,
+export class Event extends Model {
+  [util.inspect.custom]() {
+    return this.toJSON();
+  }
+}
+Event.init(
+  {
+    eventCode: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false,
+    },
+    eventName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
-  levelName: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  coaches: {
-    type: DataTypes.JSONB, // Array of coaches
-    allowNull: true,
-  },
-  times: {
-    type: DataTypes.JSONB, // Object to store times
-    allowNull: true,
-  },
-});
+  {
+    modelName: "event",
+    sequelize: db,
+  }
+);
 
-const Event = sequelize.define("Event", {
-  eventCode: {
-    type: DataTypes.STRING,
-    allowNull: false,
+export class Coach extends Model {
+  [util.inspect.custom]() {
+    return this.toJSON();
+  }
+}
+Coach.init(
+  {
+    coachName: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false,
+    },
   },
-  eventName: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-});
-
-const Coach = sequelize.define("Coach", {
-  coachName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-});
+  {
+    modelName: "coach",
+    sequelize: db,
+  }
+);
 
 export { Day, Level, Event, Coach };
