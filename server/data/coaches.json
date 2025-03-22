@@ -1,1 +1,12 @@
-[{ "coachName": "Courtney" }]
+[
+  { "coachName": "Courtney", "levels": [], "days": [] },
+  { "coachName": "Peyton", "levels": [], "days": [] },
+  { "coachName": "Piper", "levels": [], "days": [] },
+  { "coachName": "Emma", "levels": [], "days": [] },
+  { "coachName": "Anika", "levels": [], "days": [] },
+  { "coachName": "Abi", "levels": [], "days": [] },
+  { "coachName": "Wendy", "levels": [], "days": [] },
+  { "coachName": "Rachel", "levels": [], "days": [] },
+  { "coachName": "Sara", "levels": [], "days": [] },
+  { "coachName": "Sevina", "levels": [], "days": [] }
+]

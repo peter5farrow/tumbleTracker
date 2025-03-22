@@ -3,25 +3,19 @@ import levels from "./data/levels.json" assert { type: "json" };
 import events from "./data/events.json" assert { type: "json" };
 import days from "./data/days.json" assert { type: "json" };
 import coaches from "./data/coaches.json" assert { type: "json" };
-import times from "./data/times.json" assert { type: "json" };
 
 console.log("Syncing database...");
 await db.sync({ force: true });
 
-console.log("Dropping tables...");
-await Level.destroy({ where: {}, truncate: true });
-await Event.destroy({ where: {}, truncate: true });
-await Day.destroy({ where: {}, truncate: true });
-await Coach.destroy({ where: {}, truncate: true });
-
 console.log("Seeding database...");
 const levelsInDB = await Level.bulkCreate(
   levels.map((level) => {
-    const { levelCode, levelName, coaches } = level;
+    const { levelCode, levelName, days, coaches } = level;
 
     return {
       levelCode,
       levelName,
+      days,
       coaches,
     };
   })
@@ -40,22 +34,25 @@ const eventsInDB = await Event.bulkCreate(
 
 const daysInDB = await Day.bulkCreate(
   days.map((day) => {
-    const { dayCode, dayName, levels } = day;
+    const { dayCode, dayName, levels, coaches } = day;
 
     return {
       dayCode,
       dayName,
       levels,
+      coaches,
     };
   })
 );
 
 const coachesInDB = await Coach.bulkCreate(
   coaches.map((coach) => {
-    const { coachName } = coach;
+    const { coachName, levels, days } = coach;
 
     return {
       coachName,
+      levels,
+      days,
     };
   })
 );

@@ -2,61 +2,73 @@
   {
     "dayCode": "monA",
     "dayName": "Monday A",
-    "levels": []
+    "levels": [],
+    "coaches": []
   },
   {
     "dayCode": "monB",
     "dayName": "Monday B",
-    "levels": []
+    "levels": [],
+    "coaches": []
   },
   {
     "dayCode": "tuesA",
     "dayName": "Tuesday A",
-    "levels": []
+    "levels": [],
+    "coaches": []
   },
   {
     "dayCode": "tuesB",
     "dayName": "Tuesday B",
-    "levels": []
+    "levels": [],
+    "coaches": []
   },
   {
     "dayCode": "wedA",
     "dayName": "Wednesday A",
-    "levels": []
+    "levels": [],
+    "coaches": []
   },
   {
     "dayCode": "wedB",
     "dayName": "Wednesday B",
-    "levels": []
+    "levels": [],
+    "coaches": []
   },
   {
     "dayCode": "thursA",
     "dayName": "Thursday A",
-    "levels": []
+    "levels": [],
+    "coaches": []
   },
   {
     "dayCode": "thursB",
     "dayName": "Thursday B",
-    "levels": []
+    "levels": [],
+    "coaches": []
   },
   {
     "dayCode": "friA",
     "dayName": "Friday A",
-    "levels": []
+    "levels": [],
+    "coaches": []
   },
   {
     "dayCode": "friB",
     "dayName": "Friday B",
-    "levels": []
+    "levels": [],
+    "coaches": []
   },
   {
     "dayCode": "satA",
     "dayName": "Saturday A",
-    "levels": []
+    "levels": [],
+    "coaches": []
   },
   {
     "dayCode": "satB",
     "dayName": "Saturday B",
-    "levels": []
+    "levels": [],
+    "coaches": []
   }
 ]
