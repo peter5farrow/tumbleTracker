@@ -23,7 +23,6 @@ const levelsInDB = await Level.bulkCreate(
       levelCode,
       levelName,
       coaches,
-      times,
     };
   })
 );
