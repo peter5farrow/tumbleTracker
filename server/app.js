@@ -24,18 +24,9 @@ ViteExpress.config({ printViteDevServerHost: true });
 // Routes
 
 // GET
-app.get("/api/days", async (req, res) => {
-  try {
-    const days = await Day.find();
-    res.json(days);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
 app.get("/api/levels", async (req, res) => {
   try {
-    const levels = await Level.find();
+    const levels = await Level.findAll();
     res.json(levels);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -44,8 +35,26 @@ app.get("/api/levels", async (req, res) => {
 
 app.get("/api/events", async (req, res) => {
   try {
-    const events = await Event.find();
+    const events = await Event.findAll();
     res.json(events);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get("/api/days", async (req, res) => {
+  try {
+    const days = await Day.findAll();
+    res.json(days);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get("/api/coaches", async (req, res) => {
+  try {
+    const coaches = await Coach.findAll();
+    res.json(coaches);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -54,15 +63,6 @@ app.get("/api/events", async (req, res) => {
 app.get("/api/times", async (req, res) => {
   try {
     res.send(times);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.get("/api/coaches", async (req, res) => {
-  try {
-    const coaches = await Coach.find();
-    res.json(coaches);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -93,33 +93,8 @@ app.put("/api/update-levels", async (req, res) => {
   const { day, levels } = req.body;
 
   const thisDay = await Day.findOne({ dayCode: day });
-  const thisDayLevelCodes = thisDay.levels.map((lvl) => {
-    return lvl.levelCode;
-  });
-
+  //******** */
   try {
-    if (thisDay.levels.length === 0) {
-      for (const level of levels) {
-        thisDay.levels.push(await Level.findOne({ levelCode: level }));
-      }
-      let savedDay = await thisDay.save();
-      res.status(201).json(savedDay);
-      return;
-    }
-
-    for (const level of levels) {
-      if (!thisDayLevelCodes.includes(level)) {
-        thisDay.levels.push(await Level.findOne({ levelCode: level }));
-      }
-    }
-
-    for (let i = thisDay.levels.length - 1; i >= 0; i--) {
-      const level = thisDay.levels[i];
-      if (!levels.includes(level.levelCode)) {
-        thisDay.levels.splice(i, 1);
-      }
-    }
-
     let savedDay = await thisDay.save();
     res.status(201).json(savedDay);
   } catch (err) {
