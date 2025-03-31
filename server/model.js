@@ -24,11 +24,11 @@ Level.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    days: {
+    levelDays: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
-    coaches: {
+    levelCoaches: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
@@ -78,11 +78,11 @@ Day.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    levels: {
+    dayLevels: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
-    coaches: {
+    dayCoaches: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
@@ -151,11 +151,11 @@ Coach.init(
       primaryKey: true,
       allowNull: false,
     },
-    levels: {
+    coachLevels: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
-    days: {
+    coachDays: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
@@ -207,29 +207,61 @@ Rotation.init(
       autoIncrement: true,
       allowNull: false,
     },
-    levelId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    eventId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    dayId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    timeId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    coachIds: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: false,
-    },
+    // levelId: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
+    // eventId: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
+    // dayId: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
+    // timeId: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    // },
+    // coachIds: {
+    //   type: DataTypes.ARRAY(DataTypes.STRING),
+    //   allowNull: false,
+    // },
   },
   {
-    modelName: "timeslot",
+    modelName: "rotation",
     sequelize: db,
   }
 );
+
+Level.hasMany(Rotation, { foreignKey: "levelCode" });
+Rotation.belongsTo(Level, { foreignKey: "levelCode" });
+
+Event.hasMany(Rotation, { foreignKey: "eventCode" });
+Rotation.belongsTo(Event, { foreignKey: "eventCode" });
+
+Day.hasMany(Rotation, { foreignKey: "dayCode" });
+Rotation.belongsTo(Day, { foreignKey: "dayCode" });
+
+Timeslot.hasMany(Rotation, { foreignKey: "timeslotId" });
+Rotation.belongsTo(Timeslot, { foreignKey: "timeslotId" });
+
+Coach.hasMany(Rotation, { foreignKey: "coachName" });
+Rotation.belongsTo(Coach, { foreignKey: "coachName" });
+
+//
+
+Level.hasMany(Coach, { foreignKey: "levelCode" });
+Coach.belongsTo(Level, { foreignKey: "levelCode" });
+Level.hasMany(Day, { foreignKey: "levelCode" });
+Day.belongsTo(Level, { foreignKey: "levelCode" });
+
+Day.hasMany(Level, { foreignKey: "dayCode" });
+Level.belongsTo(Day, { foreignKey: "dayCode" });
+Day.hasMany(Coach, { foreignKey: "dayCode" });
+Coach.belongsTo(Day, { foreignKey: "dayCode" });
+
+Coach.hasMany(Level, { foreignKey: "coachName" });
+Level.belongsTo(Coach, { foreignKey: "coachName" });
+Coach.hasMany(Day, { foreignKey: "coachName" });
+Day.belongsTo(Coach, { foreignKey: "coachName" });

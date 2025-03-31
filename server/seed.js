@@ -1,4 +1,4 @@
-import { Level, Event, Day, Coach, db } from "./model.js";
+import { Level, Event, Day, Coach, db, Timeslot } from "./model.js";
 import levels from "./data/levels.json" assert { type: "json" };
 import events from "./data/events.json" assert { type: "json" };
 import days from "./data/days.json" assert { type: "json" };
@@ -57,10 +57,17 @@ const coachesInDB = await Coach.bulkCreate(
   })
 );
 
+const testTimeslot = await Timeslot.create({
+  timeslotId: 1,
+  startTime: "14:00:00",
+  endTime: "15:00:00",
+});
+
 console.log(levelsInDB);
 console.log(eventsInDB);
 console.log(daysInDB);
 console.log(coachesInDB);
+console.log(testTimeslot);
 
 await db.close();
 console.log("Finished seeding database!");

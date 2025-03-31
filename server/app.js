@@ -91,10 +91,13 @@ app.get("/api/eventName/:inputEvent", async (req, res) => {
 // PUT
 app.put("/api/update-levels", async (req, res) => {
   const { day, levels } = req.body;
-
-  const thisDay = await Day.findOne({ dayCode: day });
-  //******** */
   try {
+    const thisDay = await Day.findOne({ dayCode: day });
+
+    for (const level of levels) {
+      thisDay.levels.push(level);
+    }
+
     let savedDay = await thisDay.save();
     res.status(201).json(savedDay);
   } catch (err) {
