@@ -15,8 +15,8 @@ const levelsInDB = await Level.bulkCreate(
     return {
       levelCode,
       levelName,
-      days,
-      coaches,
+      levelDays: days,
+      levelCoaches: coaches,
     };
   })
 );
@@ -39,8 +39,8 @@ const daysInDB = await Day.bulkCreate(
     return {
       dayCode,
       dayName,
-      levels,
-      coaches,
+      dayLevels: levels,
+      dayCoaches: coaches,
     };
   })
 );
@@ -51,8 +51,8 @@ const coachesInDB = await Coach.bulkCreate(
 
     return {
       coachName,
-      levels,
-      days,
+      coachLevels: levels,
+      coachDays: days,
     };
   })
 );

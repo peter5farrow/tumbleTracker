@@ -71,18 +71,8 @@ app.get("/api/times", async (req, res) => {
 app.get("/api/day/:inputDay", async (req, res) => {
   try {
     const { inputDay } = req.params;
-    const day = await Day.findOne({ dayCode: inputDay });
+    const day = await Day.findOne({ where: { dayCode: inputDay } });
     res.json(day);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.get("/api/eventName/:inputEvent", async (req, res) => {
-  try {
-    const { inputEvent } = req.params;
-    const event = await Event.findOne({ eventCode: inputEvent });
-    res.send(event.eventName);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -92,10 +82,42 @@ app.get("/api/eventName/:inputEvent", async (req, res) => {
 app.put("/api/update-levels", async (req, res) => {
   const { day, levels } = req.body;
   try {
-    const thisDay = await Day.findOne({ dayCode: day });
+    const thisDay = await Day.findOne({ where: { dayCode: day } });
+
+    if (!thisDay.dayLevels) {
+      thisDay.dayLevels = [];
+    }
+    if (!thisDay.dayCoaches) {
+      thisDay.dayCoaches = [];
+    }
 
     for (const level of levels) {
-      thisDay.levels.push(level);
+      thisDay.dayLevels.push(level);
+
+      const thisLevel = await Level.findOne({ where: { levelCode: level } });
+
+      if (thisLevel.levelCoaches) {
+        for (const coach of thisLevel.levelCoaches) {
+          thisDay.dayCoaches.push(coach);
+
+          const thisCoach = await Coach.findOne({
+            where: { coachName: coach },
+          });
+          if (!thisCoach.coachDays) {
+            thisCoach.coachDays = [];
+          }
+          if (!thisCoach.coachDays.includes(day)) {
+            thisCoach.coachDays.push(day);
+          }
+          await thisCoach.save();
+        }
+      }
+
+      if (!thisLevel.levelDays) {
+        thisLevel.levelDays = [];
+      }
+      thisLevel.levelDays.push(day);
+      await thisLevel.save();
     }
 
     let savedDay = await thisDay.save();

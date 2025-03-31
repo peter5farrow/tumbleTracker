@@ -1,5 +1,5 @@
 [
-  { "coachName": "Courtney", "levels": [], "days": [] },
+  { "coachName": "Courtney", "levels": ["pre3A"], "days": [] },
   { "coachName": "Peyton", "levels": [], "days": [] },
   { "coachName": "Piper", "levels": [], "days": [] },
   { "coachName": "Emma", "levels": [], "days": [] },

@@ -22,15 +22,12 @@ Level.init(
     },
     levelName: {
       type: DataTypes.STRING,
-      allowNull: true,
     },
     levelDays: {
       type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
     },
     levelCoaches: {
       type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
     },
   },
   {
@@ -53,7 +50,6 @@ Event.init(
     },
     eventName: {
       type: DataTypes.STRING,
-      allowNull: true,
     },
   },
   {
@@ -76,15 +72,12 @@ Day.init(
     },
     dayName: {
       type: DataTypes.STRING,
-      allowNull: true,
     },
     dayLevels: {
       type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
     },
     dayCoaches: {
       type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
     },
   },
   {
@@ -153,11 +146,9 @@ Coach.init(
     },
     coachLevels: {
       type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
     },
     coachDays: {
       type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
     },
   },
   {
@@ -251,17 +242,17 @@ Rotation.belongsTo(Coach, { foreignKey: "coachName" });
 
 //
 
-Level.hasMany(Coach, { foreignKey: "levelCode" });
-Coach.belongsTo(Level, { foreignKey: "levelCode" });
-Level.hasMany(Day, { foreignKey: "levelCode" });
-Day.belongsTo(Level, { foreignKey: "levelCode" });
+// Level.hasMany(Coach, { foreignKey: "levelCode" });
+// Coach.belongsTo(Level, { foreignKey: "levelCode" });
+// Level.hasMany(Day, { foreignKey: "levelCode" });
+// Day.belongsTo(Level, { foreignKey: "levelCode" });
 
-Day.hasMany(Level, { foreignKey: "dayCode" });
-Level.belongsTo(Day, { foreignKey: "dayCode" });
-Day.hasMany(Coach, { foreignKey: "dayCode" });
-Coach.belongsTo(Day, { foreignKey: "dayCode" });
+// Day.hasMany(Level, { foreignKey: "dayCode" });
+// Level.belongsTo(Day, { foreignKey: "dayCode" });
+// Day.hasMany(Coach, { foreignKey: "dayCode" });
+// Coach.belongsTo(Day, { foreignKey: "dayCode" });
 
-Coach.hasMany(Level, { foreignKey: "coachName" });
-Level.belongsTo(Coach, { foreignKey: "coachName" });
-Coach.hasMany(Day, { foreignKey: "coachName" });
-Day.belongsTo(Coach, { foreignKey: "coachName" });
+// Coach.hasMany(Level, { foreignKey: "coachName" });
+// Level.belongsTo(Coach, { foreignKey: "coachName" });
+// Coach.hasMany(Day, { foreignKey: "coachName" });
+// Day.belongsTo(Coach, { foreignKey: "coachName" });
