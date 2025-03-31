@@ -150,6 +150,23 @@ app.put("/api/add-event", async (req, res) => {
     let hasConflict = false;
 
     // *Deletes other events if reassigning a certain level. It does have the bug of deleting all other instances of events with conflicts. Check on this later.*
+
+    // WORKING ON CONFLICTED COACHES
+    const proposedLevel = await Level.findOne({ levelCode: level });
+
+    const conflictedCoaches = [];
+
+    const proposedCoachesArry = [];
+    for (const coach of proposedLevel.coaches) {
+      proposedCoachesArry.push(coach.coachName);
+    }
+
+    for (const coach of proposedCoachesArry) {
+      if (conflictedCoaches.includes(coach)) {
+        hasConflict = true;
+      }
+    }
+    //
     const conflictedEvents = [];
 
     for (const key of rotationTimes) {

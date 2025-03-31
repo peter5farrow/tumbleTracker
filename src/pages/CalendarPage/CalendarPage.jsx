@@ -51,47 +51,54 @@ export default function Calendar() {
   for (const time of timeOptions.data) {
     const cells = [];
 
-    for (const level of today.levels) {
-      if (level.times[time] === "recVault") {
-        cells.push(
-          <td
-            key={`${time}${level.levelCode}`}
-            style={{ backgroundColor: "lightgreen" }}
-          >
-            {level.times[time]}
-          </td>
-        );
-      } else if (level.times[time] === "recBars") {
-        cells.push(
-          <td
-            key={`${time}${level.levelCode}`}
-            style={{ backgroundColor: "lightblue" }}
-          >
-            {level.times[time]}
-          </td>
-        );
-      } else if (level.times[time] === "recBeam") {
-        cells.push(
-          <td
-            key={`${time}${level.levelCode}`}
-            style={{ backgroundColor: "lightpink" }}
-          >
-            {level.times[time]}
-          </td>
-        );
-      } else if (level.times[time] === "recFloorA") {
-        cells.push(
-          <td
-            key={`${time}${level.levelCode}`}
-            style={{ backgroundColor: "gold" }}
-          >
-            {level.times[time]}
-          </td>
-        );
-      } else {
-        cells.push(
-          <td key={`${time}${level.levelCode}`}>{level.times[time]}</td>
-        );
+    for (const coach of coachesArray) {
+      for (const level of today.levels) {
+        const coachNameArray = [];
+        for (const coach of level.coaches) {
+          coachNameArray.push(coach.coachName);
+        }
+        if (coachNameArray.includes(coach)) {
+          // if (level.times[time] === "recVault") {
+          //   cells.push(
+          //     <td
+          //       key={`${time}${level.levelCode}`}
+          //       style={{ backgroundColor: "lightgreen" }}
+          //     >
+          //       {level.times[time]}
+          //     </td>
+          //   );
+          // } else if (level.times[time] === "recBars") {
+          //   cells.push(
+          //     <td
+          //       key={`${time}${level.levelCode}`}
+          //       style={{ backgroundColor: "lightblue" }}
+          //     >
+          //       {level.times[time]}
+          //     </td>
+          //   );
+          // } else if (level.times[time] === "recBeam") {
+          //   cells.push(
+          //     <td
+          //       key={`${time}${level.levelCode}`}
+          //       style={{ backgroundColor: "lightpink" }}
+          //     >
+          //       {level.times[time]}
+          //     </td>
+          //   );
+          // } else if (level.times[time] === "recFloorA") {
+          //   cells.push(
+          //     <td
+          //       key={`${time}${level.levelCode}`}
+          //       style={{ backgroundColor: "gold" }}
+          //     >
+          //       {level.times[time]}
+          //     </td>
+          //   );
+          // } else {
+          cells.push(
+            <td key={`${time}${level.levelCode}`}>{level.times[time]}</td>
+          );
+        }
       }
     }
 
