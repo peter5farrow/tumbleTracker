@@ -23,12 +23,6 @@ Level.init(
     levelName: {
       type: DataTypes.STRING,
     },
-    levelDays: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
-    levelCoaches: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
   },
   {
     modelName: "level",
@@ -73,62 +67,56 @@ Day.init(
     dayName: {
       type: DataTypes.STRING,
     },
-    dayLevels: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
-    dayCoaches: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
   },
   {
     modelName: "day",
     sequelize: db,
-    hooks: {
-      beforeSave: (day) => {
-        const levelOrder = [
-          "pre3A",
-          "pre3B",
-          "pre45A",
-          "pre45B",
-          "whiteRibA",
-          "whiteRibB",
-          "redRibA",
-          "redRibB",
-          "blueRibA",
-          "blueRibB",
-          "bronzeMedA",
-          "bronzeMedB",
-          "silvMedA",
-          "silvMedB",
-          "begBoys",
-          "intBoys",
-          "begTumb",
-          "intTumb",
-          "cheerTumb",
-          "airAware",
-          "hotShotFoun",
-          "hotShotAdv",
-          "hotTots",
-          "xcelA",
-          "xcelSilver",
-          "xcelGold",
-          "level3",
-          "level4",
-          "optionalA",
-          "optionalB",
-        ];
+    // hooks: {
+    //   beforeSave: (day) => {
+    //     const levelOrder = [
+    //       "pre3A",
+    //       "pre3B",
+    //       "pre45A",
+    //       "pre45B",
+    //       "whiteRibA",
+    //       "whiteRibB",
+    //       "redRibA",
+    //       "redRibB",
+    //       "blueRibA",
+    //       "blueRibB",
+    //       "bronzeMedA",
+    //       "bronzeMedB",
+    //       "silvMedA",
+    //       "silvMedB",
+    //       "begBoys",
+    //       "intBoys",
+    //       "begTumb",
+    //       "intTumb",
+    //       "cheerTumb",
+    //       "airAware",
+    //       "hotShotFoun",
+    //       "hotShotAdv",
+    //       "hotTots",
+    //       "xcelA",
+    //       "xcelSilver",
+    //       "xcelGold",
+    //       "level3",
+    //       "level4",
+    //       "optionalA",
+    //       "optionalB",
+    //     ];
 
-        if (day.levels && Array.isArray(day.levels)) {
-          day.levels.sort((a, b) => {
-            const indexA = levelOrder.indexOf(a.levelCode);
-            const indexB = levelOrder.indexOf(b.levelCode);
+    //     if (day.levels && Array.isArray(day.levels)) {
+    //       day.levels.sort((a, b) => {
+    //         const indexA = levelOrder.indexOf(a.levelCode);
+    //         const indexB = levelOrder.indexOf(b.levelCode);
 
-            if (indexA === -1 || indexB === -1) return 0;
-            return indexA - indexB;
-          });
-        }
-      },
-    },
+    //         if (indexA === -1 || indexB === -1) return 0;
+    //         return indexA - indexB;
+    //       });
+    //     }
+    //   },
+    // },
   }
 );
 
@@ -139,16 +127,15 @@ export class Coach extends Model {
 }
 Coach.init(
   {
-    coachName: {
-      type: DataTypes.STRING,
+    coachId: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
       allowNull: false,
     },
-    coachLevels: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
-    coachDays: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+    coachName: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
@@ -198,22 +185,22 @@ Rotation.init(
       autoIncrement: true,
       allowNull: false,
     },
-    // levelId: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
-    // eventId: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
-    // dayId: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
-    // timeId: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    // },
+    levelCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    eventCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    dayCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    timeslotId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     // coachIds: {
     //   type: DataTypes.ARRAY(DataTypes.STRING),
     //   allowNull: false,
@@ -221,6 +208,41 @@ Rotation.init(
   },
   {
     modelName: "rotation",
+    sequelize: db,
+  }
+);
+
+export class LevelDay extends Model {
+  [util.inspect.custom]() {
+    return this.toJSON();
+  }
+}
+LevelDay.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false,
+    },
+    levelId: {
+      type: DataTypes.STRING,
+      references: {
+        model: Level,
+        key: "level_code",
+      },
+    },
+    dayId: {
+      type: DataTypes.STRING,
+      references: {
+        model: Day,
+        key: "day_code",
+      },
+    },
+  },
+  {
+    modelName: "LevelDays",
+    tableName: "level_days",
     sequelize: db,
   }
 );
@@ -237,22 +259,18 @@ Rotation.belongsTo(Day, { foreignKey: "dayCode" });
 Timeslot.hasMany(Rotation, { foreignKey: "timeslotId" });
 Rotation.belongsTo(Timeslot, { foreignKey: "timeslotId" });
 
-Coach.hasMany(Rotation, { foreignKey: "coachName" });
-Rotation.belongsTo(Coach, { foreignKey: "coachName" });
-
 //
 
-// Level.hasMany(Coach, { foreignKey: "levelCode" });
-// Coach.belongsTo(Level, { foreignKey: "levelCode" });
-// Level.hasMany(Day, { foreignKey: "levelCode" });
-// Day.belongsTo(Level, { foreignKey: "levelCode" });
+Level.belongsToMany(Day, { through: LevelDay });
+Day.belongsToMany(Level, { through: LevelDay });
 
-// Day.hasMany(Level, { foreignKey: "dayCode" });
-// Level.belongsTo(Day, { foreignKey: "dayCode" });
-// Day.hasMany(Coach, { foreignKey: "dayCode" });
-// Coach.belongsTo(Day, { foreignKey: "dayCode" });
+// Day.belongsToMany(Coach, { through: "DayCoaches" });
+// Coach.belongsToMany(Day, { through: "DayCoaches" });
 
-// Coach.hasMany(Level, { foreignKey: "coachName" });
-// Level.belongsTo(Coach, { foreignKey: "coachName" });
-// Coach.hasMany(Day, { foreignKey: "coachName" });
-// Day.belongsTo(Coach, { foreignKey: "coachName" });
+// Coach.belongsToMany(Level, { through: "CoachLevels" });
+// Level.belongsToMany(Coach, { through: "CoachLevels" });
+
+// Coach.belongsToMany(Rotation, { through: "CoachRotations" });
+// Rotation.belongsToMany(Coach, { through: "CoachRotations" });
+
+// db.sync({ force: true });

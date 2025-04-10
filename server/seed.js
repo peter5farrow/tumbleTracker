@@ -1,4 +1,4 @@
-import { Level, Event, Day, Coach, db, Timeslot } from "./model.js";
+import { Level, Event, Day, Coach, Timeslot, db } from "./model.js";
 import levels from "./data/levels.json" assert { type: "json" };
 import events from "./data/events.json" assert { type: "json" };
 import days from "./data/days.json" assert { type: "json" };
@@ -15,8 +15,6 @@ const levelsInDB = await Level.bulkCreate(
     return {
       levelCode,
       levelName,
-      levelDays: days,
-      levelCoaches: coaches,
     };
   })
 );
@@ -39,8 +37,6 @@ const daysInDB = await Day.bulkCreate(
     return {
       dayCode,
       dayName,
-      dayLevels: levels,
-      dayCoaches: coaches,
     };
   })
 );
@@ -51,8 +47,6 @@ const coachesInDB = await Coach.bulkCreate(
 
     return {
       coachName,
-      coachLevels: levels,
-      coachDays: days,
     };
   })
 );

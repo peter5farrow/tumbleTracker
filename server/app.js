@@ -3,7 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import ViteExpress from "vite-express";
 import dotenv from "dotenv";
-import { Level, Event, Day, Coach } from "./model.js";
+import { Level, Event, Day, Coach, LevelDay, db } from "./model.js";
 import { times } from "./gtcData.js";
 
 dotenv.config();
@@ -78,54 +78,40 @@ app.get("/api/day/:inputDay", async (req, res) => {
   }
 });
 
+app.get("/api/leveldays", async (req, res) => {
+  try {
+    const levelDays = await LevelDay.findAll();
+    res.json(levelDays);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // PUT
+
+// WORKING ON THIS ONE:
 app.put("/api/update-levels", async (req, res) => {
   const { day, levels } = req.body;
   try {
     const thisDay = await Day.findOne({ where: { dayCode: day } });
 
-    if (!thisDay.dayLevels) {
-      thisDay.dayLevels = [];
-    }
-    if (!thisDay.dayCoaches) {
-      thisDay.dayCoaches = [];
-    }
+    const thisDayLevels = await thisDay.getLevels();
+    console.log(thisDayLevels);
 
     for (const level of levels) {
-      thisDay.dayLevels.push(level);
-
-      const thisLevel = await Level.findOne({ where: { levelCode: level } });
-
-      if (thisLevel.levelCoaches) {
-        for (const coach of thisLevel.levelCoaches) {
-          thisDay.dayCoaches.push(coach);
-
-          const thisCoach = await Coach.findOne({
-            where: { coachName: coach },
-          });
-          if (!thisCoach.coachDays) {
-            thisCoach.coachDays = [];
-          }
-          if (!thisCoach.coachDays.includes(day)) {
-            thisCoach.coachDays.push(day);
-          }
-          await thisCoach.save();
-        }
+      if (!thisDayLevels.includes(level)) {
+        await thisDay.addLevel(level);
       }
-
-      if (!thisLevel.levelDays) {
-        thisLevel.levelDays = [];
-      }
-      thisLevel.levelDays.push(day);
-      await thisLevel.save();
     }
 
-    let savedDay = await thisDay.save();
+    const savedDay = await thisDay.save();
+
     res.status(201).json(savedDay);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
+//
 
 app.put("/api/add-event", async (req, res) => {
   const { day, level, event, startTime, duration } = req.body;
@@ -212,6 +198,7 @@ const timeslot = await Timeslot.findOne({})
 });
 
 //
+
 if (process.env.NODE_ENV === "development") {
   ViteExpress.listen(app, port, () =>
     console.log(`Server is listening on http://localhost:${port}`)
