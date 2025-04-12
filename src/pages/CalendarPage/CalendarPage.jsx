@@ -12,14 +12,14 @@ const demoDay = await axios.get("/api/day/monA");
 
 export default function Calendar() {
   const [inputDay, setInputDay] = useState("monA");
-  const [today, setToday] = useState(demoDay.data);
+  const [todayLevels, setTodayLevels] = useState(demoDay.data);
 
   useEffect(() => {
-    const fetchDay = async () => {
+    const fetchDayLevels = async () => {
       const res = await axios.get(`/api/day/${inputDay}`);
-      setToday(res.data);
+      setTodayLevels(res.data);
     };
-    fetchDay();
+    fetchDayLevels();
   }, [inputDay]);
 
   const navigate = useNavigate();
@@ -29,65 +29,65 @@ export default function Calendar() {
   };
 
   // *Eventually switch to coachHeaders*
-  const levelHeaders = today.levels.map((level) => {
+  const levelHeaders = todayLevels.map((level) => {
     return <th key={level.levelCode}>{level.levelName}</th>;
   });
 
-  const rows = [];
-  for (const time of timeOptions.data) {
-    const cells = [];
+  // const rows = [];
+  // for (const time of timeOptions.data) {
+  //   const cells = [];
 
-    for (const level of today.levels) {
-      if (level.times[time] === "recVault") {
-        cells.push(
-          <td
-            key={`${time}${level.levelCode}`}
-            style={{ backgroundColor: "lightgreen" }}
-          >
-            {level.times[time]}
-          </td>
-        );
-      } else if (level.times[time] === "recBars") {
-        cells.push(
-          <td
-            key={`${time}${level.levelCode}`}
-            style={{ backgroundColor: "lightblue" }}
-          >
-            {level.times[time]}
-          </td>
-        );
-      } else if (level.times[time] === "recBeam") {
-        cells.push(
-          <td
-            key={`${time}${level.levelCode}`}
-            style={{ backgroundColor: "lightpink" }}
-          >
-            {level.times[time]}
-          </td>
-        );
-      } else if (level.times[time] === "recFloorA") {
-        cells.push(
-          <td
-            key={`${time}${level.levelCode}`}
-            style={{ backgroundColor: "gold" }}
-          >
-            {level.times[time]}
-          </td>
-        );
-      } else {
-        cells.push(
-          <td key={`${time}${level.levelCode}`}>{level.times[time]}</td>
-        );
-      }
-    }
+  //   for (const level of todayLevels) {
+  //     if (level.times[time] === "recVault") {
+  //       cells.push(
+  //         <td
+  //           key={`${time}${level.levelCode}`}
+  //           style={{ backgroundColor: "lightgreen" }}
+  //         >
+  //           {level.times[time]}
+  //         </td>
+  //       );
+  //     } else if (level.times[time] === "recBars") {
+  //       cells.push(
+  //         <td
+  //           key={`${time}${level.levelCode}`}
+  //           style={{ backgroundColor: "lightblue" }}
+  //         >
+  //           {level.times[time]}
+  //         </td>
+  //       );
+  //     } else if (level.times[time] === "recBeam") {
+  //       cells.push(
+  //         <td
+  //           key={`${time}${level.levelCode}`}
+  //           style={{ backgroundColor: "lightpink" }}
+  //         >
+  //           {level.times[time]}
+  //         </td>
+  //       );
+  //     } else if (level.times[time] === "recFloorA") {
+  //       cells.push(
+  //         <td
+  //           key={`${time}${level.levelCode}`}
+  //           style={{ backgroundColor: "gold" }}
+  //         >
+  //           {level.times[time]}
+  //         </td>
+  //       );
+  //     } else {
+  //       cells.push(
+  //         <td key={`${time}${level.levelCode}`}>{level.times[time]}</td>
+  //       );
+  //     }
+  //   }
 
-    rows.push(
-      <tr key={`${time}row`}>
-        <td key={time}>{time}</td>
-        {cells}
-      </tr>
-    );
-  }
+  //   rows.push(
+  //     <tr key={`${time}row`}>
+  //       <td key={time}>{time}</td>
+  //       {cells}
+  //     </tr>
+  //   );
+  // }
 
   const [addingEvent, setAddingEvent] = useState(false);
 
@@ -98,67 +98,67 @@ export default function Calendar() {
     navigate("/editData");
   };
 
-  if (addingEvent) {
-    return (
-      <div width="90vw">
-        <EditDataButton onClick={handleEditingData} />
-        <AddEventWindow
-          inputDay={inputDay}
-          today={today}
-          setToday={setToday}
-          onClose={handleAddingEvent}
-        />
-        <table>
-          <thead>
-            <tr>
-              <th>Time</th>
-              {levelHeaders}
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </table>
-      </div>
-    );
-  } else if (!addingEvent && today.levels.length === 0) {
-    return (
-      <div width="90vw">
-        <EditDataButton onClick={handleEditingData} />
-        <DayInput
-          days={dayOptions.data}
-          inputDay={inputDay}
-          handleDayChange={handleDayChange}
-        />
-        <table>
-          <thead>
-            <tr>
-              <th>Time</th>
-              {levelHeaders}
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </table>
-      </div>
-    );
-  } else {
-    return (
-      <div width="90vw">
-        <EditDataButton onClick={handleEditingData} />
-        <DayInput
-          days={dayOptions.data}
-          inputDay={inputDay}
-          handleDayChange={handleDayChange}
-        />
-        <AddEventButton onClick={handleAddingEvent} />
-        <table>
-          <thead>
-            <tr>
-              <th>Time</th>
-              {levelHeaders}
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </table>
-      </div>
-    );
-  }
+  // if (addingEvent) {
+  //   return (
+  //     <div width="90vw">
+  //       <EditDataButton onClick={handleEditingData} />
+  //       <AddEventWindow
+  //         inputDay={inputDay}
+  //         today={today}
+  //         setToday={setToday}
+  //         onClose={handleAddingEvent}
+  //       />
+  //       <table>
+  //         <thead>
+  //           <tr>
+  //             <th>Time</th>
+  //             {levelHeaders}
+  //           </tr>
+  //         </thead>
+  //         <tbody>{rows}</tbody>
+  //       </table>
+  //     </div>
+  //   );
+  // } else
+  // if (!addingEvent && today.levels.length === 0) {
+  //   return (
+  //     <div width="90vw">
+  //       <EditDataButton onClick={handleEditingData} />
+  //       <DayInput
+  //         days={dayOptions.data}
+  //         inputDay={inputDay}
+  //         handleDayChange={handleDayChange}
+  //       />
+  //       <table>
+  //         <thead>
+  //           <tr>
+  //             <th>Time</th>
+  //             {levelHeaders}
+  //           </tr>
+  //         </thead>
+  //         <tbody>{rows}</tbody>
+  //       </table>
+  //     </div>
+  //   );
+  // } else {
+  return (
+    <div width="90vw">
+      <EditDataButton onClick={handleEditingData} />
+      <DayInput
+        days={dayOptions.data}
+        inputDay={inputDay}
+        handleDayChange={handleDayChange}
+      />
+      <AddEventButton onClick={handleAddingEvent} />
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            {levelHeaders}
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  );
 }

@@ -21,6 +21,39 @@ app.use(cors());
 // Configure ViteExpress for development
 ViteExpress.config({ printViteDevServerHost: true });
 
+const levelOrder = [
+  "pre3A",
+  "pre3B",
+  "pre45A",
+  "pre45B",
+  "whiteRibA",
+  "whiteRibB",
+  "redRibA",
+  "redRibB",
+  "blueRibA",
+  "blueRibB",
+  "bronzeMedA",
+  "bronzeMedB",
+  "silvMedA",
+  "silvMedB",
+  "begBoys",
+  "intBoys",
+  "begTumb",
+  "intTumb",
+  "cheerTumb",
+  "airAware",
+  "hotShotFoun",
+  "hotShotAdv",
+  "hotTots",
+  "xcelA",
+  "xcelSilver",
+  "xcelGold",
+  "level3",
+  "level4",
+  "optionalA",
+  "optionalB",
+];
+
 // Routes
 
 // GET
@@ -71,8 +104,23 @@ app.get("/api/times", async (req, res) => {
 app.get("/api/day/:inputDay", async (req, res) => {
   try {
     const { inputDay } = req.params;
-    const day = await Day.findOne({ where: { dayCode: inputDay } });
-    res.json(day);
+    const dayLevels = await LevelDay.findAll({
+      where: { dayDayCode: inputDay },
+    });
+
+    const levelsList = [];
+    for (const level of dayLevels) {
+      const oneLevel = await Level.findOne({
+        where: { levelCode: level.levelLevelCode },
+      });
+      levelsList.push(oneLevel);
+    }
+
+    levelsList.sort((a, b) => {
+      return levelOrder.indexOf(a.levelCode) - levelOrder.indexOf(b.levelCode);
+    });
+
+    res.send(levelsList);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -92,28 +140,28 @@ app.get("/api/leveldays", async (req, res) => {
 // WORKING ON THIS ONE:
 app.put("/api/update-levels", async (req, res) => {
   const { day, levels } = req.body;
+
   try {
     const thisDay = await Day.findOne({ where: { dayCode: day } });
 
-    const thisDayLevels = await thisDay.getLevels();
-    console.log(thisDayLevels);
-
-    for (const levelCode of levels) {
-      const levelInstance = await Level.findOne({
-        where: { levelCode: levelCode },
-      });
-
-      if (
-        levelInstance &&
-        !thisDayLevels.some((l) => l.levelCode === levelCode)
-      ) {
-        await thisDay.addLevel(levelInstance);
-      }
+    if (!thisDay) {
+      return res.status(404).json({ message: "Day not found" });
     }
 
-    // const savedDay = await thisDay.save();
+    const levelInstances = await Level.findAll({
+      where: {
+        levelCode: levels,
+      },
+    });
 
-    res.status(201).json({ success: `Levels for ${thisDay.dayName} updated.` });
+    await thisDay.setLevels(levelInstances);
+
+    const updatedDay = await Day.findOne({
+      where: { dayCode: day },
+      include: Level,
+    });
+
+    res.status(200).json(updatedDay.levels);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

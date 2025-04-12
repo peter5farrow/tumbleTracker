@@ -250,6 +250,29 @@ DayCoach.init(
   }
 );
 
+export class CoachLevel extends Model {
+  [util.inspect.custom]() {
+    return this.toJSON();
+  }
+}
+CoachLevel.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false,
+    },
+  },
+  {
+    modelName: "coach_levels",
+    tableName: "coach_levels",
+    sequelize: db,
+  }
+);
+
+//
+
 Level.hasMany(Rotation, { foreignKey: "levelCode" });
 Rotation.belongsTo(Level, { foreignKey: "levelCode" });
 
@@ -270,8 +293,8 @@ Day.belongsToMany(Level, { through: LevelDay });
 Day.belongsToMany(Coach, { through: DayCoach });
 Coach.belongsToMany(Day, { through: DayCoach });
 
-// Coach.belongsToMany(Level, { through: "CoachLevels" });
-// Level.belongsToMany(Coach, { through: "CoachLevels" });
+Coach.belongsToMany(Level, { through: CoachLevel });
+Level.belongsToMany(Coach, { through: CoachLevel });
 
 // Coach.belongsToMany(Rotation, { through: "CoachRotations" });
 // Rotation.belongsToMany(Coach, { through: "CoachRotations" });
