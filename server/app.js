@@ -98,15 +98,22 @@ app.put("/api/update-levels", async (req, res) => {
     const thisDayLevels = await thisDay.getLevels();
     console.log(thisDayLevels);
 
-    for (const level of levels) {
-      if (!thisDayLevels.includes(level)) {
-        await thisDay.addLevel(level);
+    for (const levelCode of levels) {
+      const levelInstance = await Level.findOne({
+        where: { levelCode: levelCode },
+      });
+
+      if (
+        levelInstance &&
+        !thisDayLevels.some((l) => l.levelCode === levelCode)
+      ) {
+        await thisDay.addLevel(levelInstance);
       }
     }
 
-    const savedDay = await thisDay.save();
+    // const savedDay = await thisDay.save();
 
-    res.status(201).json(savedDay);
+    res.status(201).json({ success: `Levels for ${thisDay.dayName} updated.` });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

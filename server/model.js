@@ -201,10 +201,6 @@ Rotation.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    // coachIds: {
-    //   type: DataTypes.ARRAY(DataTypes.STRING),
-    //   allowNull: false,
-    // },
   },
   {
     modelName: "rotation",
@@ -225,24 +221,31 @@ LevelDay.init(
       primaryKey: true,
       allowNull: false,
     },
-    levelId: {
-      type: DataTypes.STRING,
-      references: {
-        model: Level,
-        key: "level_code",
-      },
-    },
-    dayId: {
-      type: DataTypes.STRING,
-      references: {
-        model: Day,
-        key: "day_code",
-      },
+  },
+  {
+    modelName: "level_days",
+    tableName: "level_days",
+    sequelize: db,
+  }
+);
+
+export class DayCoach extends Model {
+  [util.inspect.custom]() {
+    return this.toJSON();
+  }
+}
+DayCoach.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false,
     },
   },
   {
-    modelName: "LevelDays",
-    tableName: "level_days",
+    modelName: "day_coaches",
+    tableName: "day_coaches",
     sequelize: db,
   }
 );
@@ -264,8 +267,8 @@ Rotation.belongsTo(Timeslot, { foreignKey: "timeslotId" });
 Level.belongsToMany(Day, { through: LevelDay });
 Day.belongsToMany(Level, { through: LevelDay });
 
-// Day.belongsToMany(Coach, { through: "DayCoaches" });
-// Coach.belongsToMany(Day, { through: "DayCoaches" });
+Day.belongsToMany(Coach, { through: DayCoach });
+Coach.belongsToMany(Day, { through: DayCoach });
 
 // Coach.belongsToMany(Level, { through: "CoachLevels" });
 // Level.belongsToMany(Coach, { through: "CoachLevels" });
