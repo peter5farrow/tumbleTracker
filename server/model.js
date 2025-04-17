@@ -71,52 +71,6 @@ Day.init(
   {
     modelName: "day",
     sequelize: db,
-    // hooks: {
-    //   beforeSave: (day) => {
-    //     const levelOrder = [
-    //       "pre3A",
-    //       "pre3B",
-    //       "pre45A",
-    //       "pre45B",
-    //       "whiteRibA",
-    //       "whiteRibB",
-    //       "redRibA",
-    //       "redRibB",
-    //       "blueRibA",
-    //       "blueRibB",
-    //       "bronzeMedA",
-    //       "bronzeMedB",
-    //       "silvMedA",
-    //       "silvMedB",
-    //       "begBoys",
-    //       "intBoys",
-    //       "begTumb",
-    //       "intTumb",
-    //       "cheerTumb",
-    //       "airAware",
-    //       "hotShotFoun",
-    //       "hotShotAdv",
-    //       "hotTots",
-    //       "xcelA",
-    //       "xcelSilver",
-    //       "xcelGold",
-    //       "level3",
-    //       "level4",
-    //       "optionalA",
-    //       "optionalB",
-    //     ];
-
-    //     if (day.levels && Array.isArray(day.levels)) {
-    //       day.levels.sort((a, b) => {
-    //         const indexA = levelOrder.indexOf(a.levelCode);
-    //         const indexB = levelOrder.indexOf(b.levelCode);
-
-    //         if (indexA === -1 || indexB === -1) return 0;
-    //         return indexA - indexB;
-    //       });
-    //     }
-    //   },
-    // },
   }
 );
 
@@ -144,33 +98,33 @@ Coach.init(
   }
 );
 
-export class Timeslot extends Model {
-  [util.inspect.custom]() {
-    return this.toJSON();
-  }
-}
-Timeslot.init(
-  {
-    timeslotId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-      allowNull: false,
-    },
-    startTime: {
-      type: DataTypes.TIME,
-      allowNull: false,
-    },
-    endTime: {
-      type: DataTypes.TIME,
-      allowNull: false,
-    },
-  },
-  {
-    modelName: "timeslot",
-    sequelize: db,
-  }
-);
+// export class Timeslot extends Model {
+//   [util.inspect.custom]() {
+//     return this.toJSON();
+//   }
+// }
+// Timeslot.init(
+//   {
+//     timeslotId: {
+//       type: DataTypes.INTEGER,
+//       primaryKey: true,
+//       autoIncrement: true,
+//       allowNull: false,
+//     },
+//     startTime: {
+//       type: DataTypes.TIME,
+//       allowNull: false,
+//     },
+//     endTime: {
+//       type: DataTypes.TIME,
+//       allowNull: false,
+//     },
+//   },
+//   {
+//     modelName: "timeslot",
+//     sequelize: db,
+//   }
+// );
 
 export class Rotation extends Model {
   [util.inspect.custom]() {
@@ -197,8 +151,12 @@ Rotation.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    timeslotId: {
-      type: DataTypes.INTEGER,
+    startTime: {
+      type: DataTypes.TIME,
+      allowNull: false,
+    },
+    endTime: {
+      type: DataTypes.TIME,
       allowNull: false,
     },
   },
@@ -207,6 +165,8 @@ Rotation.init(
     sequelize: db,
   }
 );
+
+// Junction Tables
 
 export class LevelDay extends Model {
   [util.inspect.custom]() {
@@ -271,6 +231,27 @@ CoachLevel.init(
   }
 );
 
+export class RotationCoach extends Model {
+  [util.inspect.custom]() {
+    return this.toJSON();
+  }
+}
+RotationCoach.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false,
+    },
+  },
+  {
+    modelName: "rotation_coaches",
+    tableName: "rotation_coaches",
+    sequelize: db,
+  }
+);
+
 //
 
 Level.hasMany(Rotation, { foreignKey: "levelCode" });
@@ -282,8 +263,8 @@ Rotation.belongsTo(Event, { foreignKey: "eventCode" });
 Day.hasMany(Rotation, { foreignKey: "dayCode" });
 Rotation.belongsTo(Day, { foreignKey: "dayCode" });
 
-Timeslot.hasMany(Rotation, { foreignKey: "timeslotId" });
-Rotation.belongsTo(Timeslot, { foreignKey: "timeslotId" });
+// Timeslot.hasMany(Rotation, { foreignKey: "timeslotId" });
+// Rotation.belongsTo(Timeslot, { foreignKey: "timeslotId" });
 
 //
 
@@ -296,7 +277,7 @@ Coach.belongsToMany(Day, { through: DayCoach });
 Coach.belongsToMany(Level, { through: CoachLevel });
 Level.belongsToMany(Coach, { through: CoachLevel });
 
-// Coach.belongsToMany(Rotation, { through: "CoachRotations" });
-// Rotation.belongsToMany(Coach, { through: "CoachRotations" });
+Rotation.belongsToMany(Coach, { through: RotationCoach });
+Coach.belongsToMany(Rotation, { through: RotationCoach });
 
 // db.sync({ force: true });

@@ -3,7 +3,8 @@ import cors from "cors";
 import morgan from "morgan";
 import ViteExpress from "vite-express";
 import dotenv from "dotenv";
-import { Level, Event, Day, Coach, LevelDay, db } from "./model.js";
+import { Sequelize } from "sequelize";
+import { Level, Event, Day, Coach, Rotation, LevelDay, db } from "./model.js";
 import { times } from "./gtcData.js";
 
 dotenv.config();
@@ -54,6 +55,21 @@ const levelOrder = [
   "optionalB",
 ];
 
+// Conflict detection helper function
+async function isEquipmentAvailable(equipmentId, startTime, endTime) {
+  const conflict = await TimeSlot.findOne({
+    where: {
+      equipmentId,
+      [Sequelize.Op.and]: [
+        { startTime: { [Sequelize.Op.lt]: endTime } },
+        { endTime: { [Sequelize.Op.gt]: startTime } },
+      ],
+    },
+  });
+
+  return !conflict;
+}
+
 // Routes
 
 // GET
@@ -101,6 +117,16 @@ app.get("/api/times", async (req, res) => {
   }
 });
 
+app.get("/api/rotations", async (req, res) => {
+  try {
+    const rotations = await Rotation.findAll();
+    res.send(rotations);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// /inputDay and inputCoach should return Rotations
 app.get("/api/day/:inputDay", async (req, res) => {
   try {
     const { inputDay } = req.params;
@@ -126,10 +152,10 @@ app.get("/api/day/:inputDay", async (req, res) => {
   }
 });
 
-app.get("/api/leveldays", async (req, res) => {
+app.get("/api/coach/:inputCoach", async (req, res) => {
   try {
-    const levelDays = await LevelDay.findAll();
-    res.json(levelDays);
+    const { inputCoach } = req.params;
+    res.json({ testing: "testing" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -137,7 +163,36 @@ app.get("/api/leveldays", async (req, res) => {
 
 // PUT
 
-// WORKING ON THIS ONE:
+// In progress:
+app.put("/api/update-coaches", async (req, res) => {
+  const { level, coaches } = req.body;
+
+  try {
+    const thisLevel = await Level.findOne({ where: { levelCode: level } });
+
+    if (!thisLevel) {
+      return res.status(404).json({ message: "Level not found" });
+    }
+
+    const coachInstances = await Coach.findAll({
+      where: {
+        coachId: coaches,
+      },
+    });
+
+    await thisLevel.setCoaches(coachInstances);
+
+    const updatedLevel = await Level.findOne({
+      where: { levelCode: level },
+      include: Coach,
+    });
+
+    res.status(200).json(updatedLevel.coaches);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 app.put("/api/update-levels", async (req, res) => {
   const { day, levels } = req.body;
 
@@ -166,88 +221,46 @@ app.put("/api/update-levels", async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
 //
 
-app.put("/api/add-event", async (req, res) => {
-  const { day, level, event, startTime, duration } = req.body;
-
-  /*
-//check for conflict
-const timeslot = await Timeslot.findOne({})
-
-  const newRotation = await Rotation.create({
-  levelCode: level,
-  eventCode: event,
-  dayCode: day,
-  timeslotId: ***,
-  coachNames: ***
-  })
-  */
+app.put("/api/add-rotation", async (req, res) => {
+  const { day, level, event, startTime, endTime } = req.body;
 
   try {
-    const thisDay = await Day.findOne({ dayCode: day });
-    const levelIndex = thisDay["levels"].findIndex(
-      (obj) => obj["levelCode"] === level
-    );
-
-    const timeKeys = Object.keys(thisDay["levels"][levelIndex]["times"]);
-    const startIndex = timeKeys.indexOf(startTime);
-    const rotationTimes = [];
-    for (
-      let i = startIndex;
-      i < startIndex + duration / 5 && i < timeKeys.length;
-      i++
-    ) {
-      rotationTimes.push(timeKeys[i]);
-    }
-
-    let hasConflict = false;
-
-    // *Deletes other events if reassigning a certain level. It does have the bug of deleting all other instances of events with conflicts. Check on this later.*
-    const conflictedEvents = [];
-
-    for (const key of rotationTimes) {
-      if (
-        thisDay["levels"][levelIndex]["times"][key] &&
-        !conflictedEvents.includes(thisDay["levels"][levelIndex]["times"][key])
-      ) {
-        conflictedEvents.push(thisDay["levels"][levelIndex]["times"][key]);
-      }
-    }
-
-    conflictedEvents.forEach((confEvt) => {
-      for (const eachTime in thisDay["levels"][levelIndex]["times"]) {
-        if (thisDay["levels"][levelIndex]["times"][eachTime] === confEvt) {
-          thisDay["levels"][levelIndex]["times"][eachTime] = "";
-        }
-      }
+    const hasConflict = await Rotation.findOne({
+      where: {
+        eventCode: event,
+        [Sequelize.Op.or]: [
+          {
+            startTime: {
+              [Sequelize.Op.lt]: endTime,
+            },
+            endTime: {
+              [Sequelize.Op.gt]: startTime,
+            },
+          },
+        ],
+      },
     });
 
-    for (const eachLevel of thisDay.levels) {
-      for (const key of rotationTimes) {
-        if (eachLevel.times[key] === event) {
-          hasConflict = true;
-        }
-      }
-    }
-
     if (hasConflict) {
-      return res
-        .status(409)
-        .json({ error: "Event conflict detected", day: thisDay });
+      throw new Error(
+        "Time conflict: event is already booked during that slot."
+      );
+    } else {
+      await Rotation.create({
+        levelCode: level,
+        eventCode: event,
+        dayCode: day,
+        startTime: startTime,
+        endTime: endTime,
+      });
     }
 
-    for (const key of rotationTimes) {
-      thisDay.levels[levelIndex].times[key] = event;
-    }
-
-    // Mark the modified part as updated
-    thisDay.markModified(`levels.${levelIndex}.times`);
-
-    const updatedDay = await thisDay.save();
-    res.status(201).json(updatedDay);
+    res.status(201).json({ success: "New rotation created" });
   } catch (error) {
-    console.error("Error saving day:", error);
+    console.error("Error updating:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
