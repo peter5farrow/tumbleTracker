@@ -4,7 +4,17 @@ import morgan from "morgan";
 import ViteExpress from "vite-express";
 import dotenv from "dotenv";
 import { Sequelize } from "sequelize";
-import { Level, Event, Day, Coach, Rotation, LevelDay, db } from "./model.js";
+import {
+  db,
+  Level,
+  Event,
+  Day,
+  Coach,
+  Rotation,
+  LevelDay,
+  DayCoach,
+  CoachLevel,
+} from "./model.js";
 import { times } from "./gtcData.js";
 
 dotenv.config();
@@ -126,11 +136,15 @@ app.get("/api/rotations", async (req, res) => {
   }
 });
 
-// /inputDay and inputCoach should return Rotations
+// Should return rotations
 app.get("/api/day/:inputDay", async (req, res) => {
   try {
     const { inputDay } = req.params;
+
     const dayLevels = await LevelDay.findAll({
+      where: { dayDayCode: inputDay },
+    });
+    const dayCoaches = await DayCoach.findAll({
       where: { dayDayCode: inputDay },
     });
 
@@ -146,24 +160,29 @@ app.get("/api/day/:inputDay", async (req, res) => {
       return levelOrder.indexOf(a.levelCode) - levelOrder.indexOf(b.levelCode);
     });
 
-    res.send(levelsList);
+    const coachesList = [];
+    for (const coach of dayCoaches) {
+      const oneCoach = await Coach.findByPk(coach.coachCoachId);
+      coachesList.push(oneCoach);
+    }
+
+    res.json({ levels: levelsList, coaches: coachesList });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-app.get("/api/coach/:inputCoach", async (req, res) => {
-  try {
-    const { inputCoach } = req.params;
-    res.json({ testing: "testing" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+// app.get("/api/coach/:inputCoach", async (req, res) => {
+//   try {
+//     const { inputCoach } = req.params;
+//     res.json({ testing: "testing" });
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
 
 // PUT
 
-// In progress:
 app.put("/api/update-coaches", async (req, res) => {
   const { level, coaches } = req.body;
 
@@ -187,12 +206,13 @@ app.put("/api/update-coaches", async (req, res) => {
       include: Coach,
     });
 
-    res.status(200).json(updatedLevel.coaches);
+    res.status(200).json(updatedLevel);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
 
+//*
 app.put("/api/update-levels", async (req, res) => {
   const { day, levels } = req.body;
 
@@ -209,20 +229,32 @@ app.put("/api/update-levels", async (req, res) => {
       },
     });
 
+    const levelCoaches = await CoachLevel.findAll({
+      where: { levelLevelCode: levels },
+    });
+
+    const coachInstances = [];
+    for (const coach of levelCoaches) {
+      coachInstances.push(
+        await Coach.findOne({
+          where: { coachId: coach.coachCoachId },
+        })
+      );
+    }
+
     await thisDay.setLevels(levelInstances);
+    await thisDay.setCoaches(coachInstances);
 
     const updatedDay = await Day.findOne({
       where: { dayCode: day },
-      include: Level,
+      include: [{ model: Level }, { model: Coach }],
     });
 
-    res.status(200).json(updatedDay.levels);
+    res.status(200).json(updatedDay);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
-
-//
 
 app.put("/api/add-rotation", async (req, res) => {
   const { day, level, event, startTime, endTime } = req.body;
@@ -245,9 +277,16 @@ app.put("/api/add-rotation", async (req, res) => {
     });
 
     if (hasConflict) {
-      throw new Error(
-        "Time conflict: event is already booked during that slot."
-      );
+      const conflictedEvent = await Event.findOne({
+        where: { eventCode: event },
+      });
+
+      res
+        .status(409)
+        .send(
+          `Error: ${conflictedEvent.eventName} is already in use during that time.`
+        );
+      return;
     } else {
       await Rotation.create({
         levelCode: level,
