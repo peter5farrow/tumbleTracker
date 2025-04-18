@@ -7,7 +7,6 @@ import LevelCheckboxes from "./components/LevelCheckboxes";
 const dayOptions = await axios.get("/api/days");
 const levelOptions = await axios.get("/api/levels");
 const coachOptions = await axios.get("/api/coaches");
-const demoDay = await axios.get("/api/day/monA");
 
 export default function EditDataPage() {
   const [inputDay, setInputDay] = useState("monA");

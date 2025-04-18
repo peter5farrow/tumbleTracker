@@ -7,19 +7,21 @@ import DayInput from "./components/DayInput.jsx";
 import EditDataButton from "./components/EditDataButton.jsx";
 
 const dayOptions = await axios.get("/api/days");
-const timeOptions = await axios.get("/api/times");
-const demoDay = await axios.get("/api/day/monA");
+const timeOptionsObj = await axios.get("/api/times");
 
 export default function Calendar() {
   const [inputDay, setInputDay] = useState("monA");
-  const [todayLevels, setTodayLevels] = useState(demoDay.data);
+  // find a different default for this:
+  const [coachRotations, setCoachRotations] = useState([
+    { name: "", rotations: [] },
+  ]);
 
   useEffect(() => {
-    const fetchDayLevels = async () => {
-      const res = await axios.get(`/api/day/${inputDay}`);
-      setTodayLevels(res.data);
+    const fetchCoachRotations = async () => {
+      const res = await axios.get(`/api/rotations/${inputDay}`);
+      setCoachRotations(res.data);
     };
-    fetchDayLevels();
+    fetchCoachRotations();
   }, [inputDay]);
 
   const navigate = useNavigate();
@@ -29,65 +31,81 @@ export default function Calendar() {
   };
 
   // *Eventually switch to coachHeaders*
-  const levelHeaders = todayLevels.map((level) => {
-    return <th key={level.levelCode}>{level.levelName}</th>;
+  const coachHeaders = coachRotations.map((coach) => {
+    return <th key={coach.name}>{coach.name}</th>;
   });
 
-  // const rows = [];
-  // for (const time of timeOptions.data) {
-  //   const cells = [];
+  const timeOptions = timeOptionsObj.data;
 
-  //   for (const level of todayLevels) {
-  //     if (level.times[time] === "recVault") {
-  //       cells.push(
-  //         <td
-  //           key={`${time}${level.levelCode}`}
-  //           style={{ backgroundColor: "lightgreen" }}
-  //         >
-  //           {level.times[time]}
-  //         </td>
-  //       );
-  //     } else if (level.times[time] === "recBars") {
-  //       cells.push(
-  //         <td
-  //           key={`${time}${level.levelCode}`}
-  //           style={{ backgroundColor: "lightblue" }}
-  //         >
-  //           {level.times[time]}
-  //         </td>
-  //       );
-  //     } else if (level.times[time] === "recBeam") {
-  //       cells.push(
-  //         <td
-  //           key={`${time}${level.levelCode}`}
-  //           style={{ backgroundColor: "lightpink" }}
-  //         >
-  //           {level.times[time]}
-  //         </td>
-  //       );
-  //     } else if (level.times[time] === "recFloorA") {
-  //       cells.push(
-  //         <td
-  //           key={`${time}${level.levelCode}`}
-  //           style={{ backgroundColor: "gold" }}
-  //         >
-  //           {level.times[time]}
-  //         </td>
-  //       );
-  //     } else {
-  //       cells.push(
-  //         <td key={`${time}${level.levelCode}`}>{level.times[time]}</td>
-  //       );
-  //     }
-  //   }
+  const rows = [];
+  for (const time of timeOptions) {
+    const cells = [];
 
-  //   rows.push(
-  //     <tr key={`${time}row`}>
-  //       <td key={time}>{time}</td>
-  //       {cells}
-  //     </tr>
-  //   );
-  // }
+    for (const coach of coachRotations) {
+      for (const rotation of coach.rotations) {
+        if (
+          timeOptions.indexOf(time) >=
+            timeOptions.indexOf(rotation.startTime) &&
+          timeOptions.indexOf(time) < timeOptions.indexOf(rotation.endTime)
+        ) {
+          cells.push(
+            <td key={`${time}${coach.name}`}>{rotation.eventCode}</td>
+          );
+        } else {
+          cells.push(<td key={`${time}${coach.name}`}></td>);
+        }
+      }
+
+      // if (level.times[time] === "recVault") {
+      //   cells.push(
+      //     <td
+      //       key={`${time}${level.levelCode}`}
+      //       style={{ backgroundColor: "lightgreen" }}
+      //     >
+      //       {level.times[time]}
+      //     </td>
+      //   );
+      // } else if (level.times[time] === "recBars") {
+      //   cells.push(
+      //     <td
+      //       key={`${time}${level.levelCode}`}
+      //       style={{ backgroundColor: "lightblue" }}
+      //     >
+      //       {level.times[time]}
+      //     </td>
+      //   );
+      // } else if (level.times[time] === "recBeam") {
+      //   cells.push(
+      //     <td
+      //       key={`${time}${level.levelCode}`}
+      //       style={{ backgroundColor: "lightpink" }}
+      //     >
+      //       {level.times[time]}
+      //     </td>
+      //   );
+      // } else if (level.times[time] === "recFloorA") {
+      //   cells.push(
+      //     <td
+      //       key={`${time}${level.levelCode}`}
+      //       style={{ backgroundColor: "gold" }}
+      //     >
+      //       {level.times[time]}
+      //     </td>
+      //   );
+      // } else {
+      //   cells.push(
+      //     <td key={`${time}${level.levelCode}`}>{level.times[time]}</td>
+      //   );
+      // }
+    }
+
+    rows.push(
+      <tr key={`${time}row`}>
+        <td key={time}>{time}</td>
+        {cells}
+      </tr>
+    );
+  }
 
   const [addingEvent, setAddingEvent] = useState(false);
 
@@ -154,10 +172,10 @@ export default function Calendar() {
         <thead>
           <tr>
             <th>Time</th>
-            {levelHeaders}
+            {coachHeaders}
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>{rows}</tbody>
       </table>
     </div>
   );
