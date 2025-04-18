@@ -14,6 +14,7 @@ import {
   LevelDay,
   DayCoach,
   CoachLevel,
+  RotationCoach,
 } from "./model.js";
 import { times } from "./gtcData.js";
 
@@ -136,15 +137,11 @@ app.get("/api/rotations", async (req, res) => {
   }
 });
 
-// Should return rotations
-app.get("/api/day/:inputDay", async (req, res) => {
+app.get("/api/levels/:inputDay", async (req, res) => {
   try {
     const { inputDay } = req.params;
 
     const dayLevels = await LevelDay.findAll({
-      where: { dayDayCode: inputDay },
-    });
-    const dayCoaches = await DayCoach.findAll({
       where: { dayDayCode: inputDay },
     });
 
@@ -160,26 +157,50 @@ app.get("/api/day/:inputDay", async (req, res) => {
       return levelOrder.indexOf(a.levelCode) - levelOrder.indexOf(b.levelCode);
     });
 
+    res.json({ levels: levelsList });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get("/api/coaches/:inputDay", async (req, res) => {
+  try {
+    const { inputDay } = req.params;
+
+    const dayCoaches = await DayCoach.findAll({
+      where: { dayDayCode: inputDay },
+    });
+
     const coachesList = [];
     for (const coach of dayCoaches) {
       const oneCoach = await Coach.findByPk(coach.coachCoachId);
       coachesList.push(oneCoach);
     }
 
-    res.json({ levels: levelsList, coaches: coachesList });
+    res.json({ coaches: coachesList });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
+//*
+app.get("/api/rotations/:inputDay", async (req, res) => {
+  try {
+    const { inputDay } = req.params;
 
-// app.get("/api/coach/:inputCoach", async (req, res) => {
-//   try {
-//     const { inputCoach } = req.params;
-//     res.json({ testing: "testing" });
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
+    const thisDay = await Day.findOne({ where: { dayCode: inputDay } });
+    const coaches = await thisDay.getCoaches();
+
+    const finalArr = [];
+    for (const coach of coaches) {
+      const rotations = await coach.getRotations();
+      finalArr.push({ name: coach.coachName, rotations: rotations });
+    }
+
+    res.json(finalArr);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // PUT
 
@@ -212,7 +233,6 @@ app.put("/api/update-coaches", async (req, res) => {
   }
 });
 
-//*
 app.put("/api/update-levels", async (req, res) => {
   const { day, levels } = req.body;
 
@@ -288,13 +308,26 @@ app.put("/api/add-rotation", async (req, res) => {
         );
       return;
     } else {
-      await Rotation.create({
+      const coaches = await CoachLevel.findAll({
+        where: { levelLevelCode: level },
+      });
+
+      const newRotation = await Rotation.create({
         levelCode: level,
         eventCode: event,
         dayCode: day,
         startTime: startTime,
         endTime: endTime,
       });
+
+      const coachesToAdd = [];
+      for (const coach of coaches) {
+        coachesToAdd.push(
+          await Coach.findOne({ where: { coachId: coach.coachCoachId } })
+        );
+      }
+
+      await newRotation.setCoaches(coachesToAdd);
     }
 
     res.status(201).json({ success: "New rotation created" });
