@@ -157,7 +157,7 @@ app.get("/api/levels/:inputDay", async (req, res) => {
       return levelOrder.indexOf(a.levelCode) - levelOrder.indexOf(b.levelCode);
     });
 
-    res.json({ levels: levelsList });
+    res.send(levelsList);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

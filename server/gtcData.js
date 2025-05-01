@@ -301,12 +301,12 @@ const endings = [
   ":55:00",
 ];
 
-for (let i = 14; i <= 19; i++) {
-  for (const ending of endings) {
-    const stringI = i.toString();
-    console.log(stringI + ending);
-  }
-}
+// for (let i = 14; i <= 19; i++) {
+//   for (const ending of endings) {
+//     const stringI = i.toString();
+//     console.log(stringI + ending);
+//   }
+// }
 
 export const times = [
   "14:30:00",

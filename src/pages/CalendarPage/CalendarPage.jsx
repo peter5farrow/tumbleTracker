@@ -11,10 +11,10 @@ const timeOptionsObj = await axios.get("/api/times");
 
 export default function Calendar() {
   const [inputDay, setInputDay] = useState("monA");
-  // find a different default for this:
   const [coachRotations, setCoachRotations] = useState([
     { name: "", rotations: [] },
   ]);
+  const [levelOptions, setLevelOptions] = useState([]);
 
   useEffect(() => {
     const fetchCoachRotations = async () => {
@@ -24,13 +24,20 @@ export default function Calendar() {
     fetchCoachRotations();
   }, [inputDay]);
 
+  useEffect(() => {
+    const fetchLevelOptions = async () => {
+      const res = await axios.get(`/api/levels/${inputDay}`);
+      setLevelOptions(res.data);
+    };
+    fetchLevelOptions();
+  }, [inputDay]);
+
   const navigate = useNavigate();
 
   const handleDayChange = (e) => {
     setInputDay(e.target.value);
   };
 
-  // *Eventually switch to coachHeaders*
   const coachHeaders = coachRotations.map((coach) => {
     return <th key={coach.name}>{coach.name}</th>;
   });
@@ -42,18 +49,22 @@ export default function Calendar() {
     const cells = [];
 
     for (const coach of coachRotations) {
-      for (const rotation of coach.rotations) {
-        if (
-          timeOptions.indexOf(time) >=
-            timeOptions.indexOf(rotation.startTime) &&
-          timeOptions.indexOf(time) < timeOptions.indexOf(rotation.endTime)
-        ) {
-          cells.push(
-            <td key={`${time}${coach.name}`}>{rotation.eventCode}</td>
-          );
-        } else {
-          cells.push(<td key={`${time}${coach.name}`}></td>);
+      if (coach.rotations.length > 0) {
+        for (const rotation of coach.rotations) {
+          if (
+            timeOptions.indexOf(time) >=
+              timeOptions.indexOf(rotation.startTime) &&
+            timeOptions.indexOf(time) < timeOptions.indexOf(rotation.endTime)
+          ) {
+            cells.push(
+              <td key={`${time}${coach.name}`}>{rotation.eventCode}</td>
+            );
+          } else {
+            cells.push(<td key={`${time}${coach.name}`}></td>);
+          }
         }
+      } else {
+        cells.push(<td key={`${time}${coach.name}`}></td>);
       }
 
       // if (level.times[time] === "recVault") {
@@ -112,71 +123,70 @@ export default function Calendar() {
   const handleAddingEvent = () => {
     setAddingEvent(!addingEvent);
   };
-  const handleEditingData = () => {
-    navigate("/editData");
-  };
+  // const handleEditingData = () => {
+  //   navigate("/editData");
+  // };
 
-  // if (addingEvent) {
-  //   return (
-  //     <div width="90vw">
-  //       <EditDataButton onClick={handleEditingData} />
-  //       <AddEventWindow
-  //         inputDay={inputDay}
-  //         today={today}
-  //         setToday={setToday}
-  //         onClose={handleAddingEvent}
-  //       />
-  //       <table>
-  //         <thead>
-  //           <tr>
-  //             <th>Time</th>
-  //             {levelHeaders}
-  //           </tr>
-  //         </thead>
-  //         <tbody>{rows}</tbody>
-  //       </table>
-  //     </div>
-  //   );
-  // } else
-  // if (!addingEvent && today.levels.length === 0) {
-  //   return (
-  //     <div width="90vw">
-  //       <EditDataButton onClick={handleEditingData} />
-  //       <DayInput
-  //         days={dayOptions.data}
-  //         inputDay={inputDay}
-  //         handleDayChange={handleDayChange}
-  //       />
-  //       <table>
-  //         <thead>
-  //           <tr>
-  //             <th>Time</th>
-  //             {levelHeaders}
-  //           </tr>
-  //         </thead>
-  //         <tbody>{rows}</tbody>
-  //       </table>
-  //     </div>
-  //   );
-  // } else {
-  return (
-    <div width="90vw">
-      <EditDataButton onClick={handleEditingData} />
-      <DayInput
-        days={dayOptions.data}
-        inputDay={inputDay}
-        handleDayChange={handleDayChange}
-      />
-      <AddEventButton onClick={handleAddingEvent} />
-      <table>
-        <thead>
-          <tr>
-            <th>Time</th>
-            {coachHeaders}
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
-    </div>
-  );
+  if (addingEvent) {
+    return (
+      <div width="90vw">
+        {/* <EditDataButton onClick={handleEditingData}/> */}
+        <AddEventWindow
+          inputDay={inputDay}
+          levelOptions={levelOptions}
+          onClose={handleAddingEvent}
+        />
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              {coachHeaders}
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </table>
+      </div>
+    );
+  } else if (!addingEvent && levelOptions.length === 0) {
+    return (
+      <div width="90vw">
+        {/* <EditDataButton onClick={handleEditingData} /> */}
+        <DayInput
+          days={dayOptions.data}
+          inputDay={inputDay}
+          handleDayChange={handleDayChange}
+        />
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              {coachHeaders}
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </table>
+      </div>
+    );
+  } else {
+    return (
+      <div width="90vw">
+        {/* <EditDataButton onClick={handleEditingData} /> */}
+        <DayInput
+          days={dayOptions.data}
+          inputDay={inputDay}
+          handleDayChange={handleDayChange}
+        />
+        <AddEventButton onClick={handleAddingEvent} />
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              {coachHeaders}
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </table>
+      </div>
+    );
+  }
 }

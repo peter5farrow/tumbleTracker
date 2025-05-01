@@ -1,7 +1,11 @@
-export default function LevelInput({ day, inputLevel, handleLevelChange }) {
-  const levelsForToday = day.levels;
+export default function LevelInput({
+  levelOptions,
+  inputLevel,
+  handleLevelChange,
+}) {
+  const levelsForToday = levelOptions;
 
-  const levelOptions = levelsForToday.map((level) => {
+  const levels = levelsForToday.map((level) => {
     return (
       <option key={level.levelCode} value={level.levelCode}>
         {level.levelName}
@@ -17,7 +21,7 @@ export default function LevelInput({ day, inputLevel, handleLevelChange }) {
         defaultValue={inputLevel}
         onChange={handleLevelChange}
       >
-        {levelOptions}
+        {levels}
       </select>
     </div>
   );
