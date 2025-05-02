@@ -10,23 +10,14 @@ const coachOptions = await axios.get("/api/coaches");
 
 export default function EditDataPage() {
   const [inputDay, setInputDay] = useState("monA");
-  const [selectedDay, setSelectedDay] = useState(demoDay.data);
   const [selectedLevels, setSelectedLevels] = useState([]);
 
   useEffect(() => {
     const fetchLevels = async () => {
-      const res = await axios.get(`/api/day/${inputDay}`);
-      setSelectedDay(res.data);
-      const day = res.data;
-
-      if (day.levels) {
-        const alreadyAddedLevels = [];
-        day.levels.forEach((level) => {
-          alreadyAddedLevels.push(level.levelCode);
-        });
-
-        setSelectedLevels(alreadyAddedLevels);
-      }
+      const res = await axios.get(`/api/levels/${inputDay}`);
+      const levelObjs = res.data;
+      const levelsCodesArr = levelObjs.map((obj) => obj.levelCode);
+      setSelectedLevels(levelsCodesArr);
     };
 
     fetchLevels();
@@ -44,8 +35,11 @@ export default function EditDataPage() {
       day: inputDay,
       levels: selectedLevels,
     });
+    console.log(res.data);
     navigate("/calendar");
   };
+  console.log(inputDay);
+  console.log(selectedLevels);
 
   return (
     <>

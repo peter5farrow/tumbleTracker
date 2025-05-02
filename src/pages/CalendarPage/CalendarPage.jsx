@@ -123,9 +123,9 @@ export default function Calendar() {
   const handleAddingEvent = () => {
     setAddingEvent(!addingEvent);
   };
-  // const handleEditingData = () => {
-  //   navigate("/editData");
-  // };
+  const handleEditingData = () => {
+    navigate("/editData");
+  };
 
   if (addingEvent) {
     return (
@@ -150,7 +150,7 @@ export default function Calendar() {
   } else if (!addingEvent && levelOptions.length === 0) {
     return (
       <div width="90vw">
-        {/* <EditDataButton onClick={handleEditingData} /> */}
+        <EditDataButton onClick={handleEditingData} />
         <DayInput
           days={dayOptions.data}
           inputDay={inputDay}
@@ -170,7 +170,7 @@ export default function Calendar() {
   } else {
     return (
       <div width="90vw">
-        {/* <EditDataButton onClick={handleEditingData} /> */}
+        <EditDataButton onClick={handleEditingData} />
         <DayInput
           days={dayOptions.data}
           inputDay={inputDay}

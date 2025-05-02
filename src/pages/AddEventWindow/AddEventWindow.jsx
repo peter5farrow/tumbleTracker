@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
-import DurationInput from "./components/DurationInput";
 import EventInput from "./components/EventInput";
 import LevelInput from "./components/LevelInput";
 import StartTimeInput from "./components/StartTimeInput";
+import EndTimeInput from "./components/EndTimeInput";
 
 const eventOptions = await axios.get("/api/events");
 const timeOptions = await axios.get("/api/times");
@@ -74,9 +74,9 @@ export default function AddEventWindow({ inputDay, levelOptions, onClose }) {
           handleStartTimeChange={handleStartTimeChange}
         />
 
-        <DurationInput
-          inputDuration={inputEndTime}
-          handleDurationChange={handleEndTimeChange}
+        <EndTimeInput
+          times={timeOptions.data}
+          handleEndTimeChange={handleEndTimeChange}
         />
         <button onClick={handleAddEvent} type="submit">
           Submit

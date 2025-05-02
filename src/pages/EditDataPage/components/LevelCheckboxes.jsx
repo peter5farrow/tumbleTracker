@@ -4,8 +4,8 @@ export default function LevelCheckboxes({
   setSelectedLevels,
   handleSubmit,
 }) {
-  const handleChange = (event) => {
-    const level = event.target.value;
+  const handleChange = (e) => {
+    const level = e.target.value;
     setSelectedLevels((prevSelected) =>
       prevSelected.includes(level)
         ? prevSelected.filter((item) => item !== level)
