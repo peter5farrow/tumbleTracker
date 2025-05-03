@@ -44,79 +44,77 @@ export default function Calendar() {
 
   const timeOptions = timeOptionsObj.data;
 
+  //
+
+  // const rows = [];
+
+  // for (const time of timeOptions) {
+  //   const rowCells = [];
+
+  //   for (const coach of coachRotations) {
+  //     if (coach.rotations.length > 0) {
+  //       for (const rotation of coach.rotations) {
+  //         if (
+  //           timeOptions.indexOf(time) >=
+  //             timeOptions.indexOf(rotation.startTime) &&
+  //           timeOptions.indexOf(time) < timeOptions.indexOf(rotation.endTime)
+  //         ) {
+  //           rowCells.push(
+  //             <td key={`${time}-${coach.name}`}>{rotation.eventCode}</td>
+  //           );
+  //         } else {
+  //           rowCells.push(<td key={`${time}-${coach.name}`}></td>);
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   rows.push(
+  //     <tr key={`${time}row`}>
+  //       <td key={time}>{time}</td>
+  //       {rowCells}
+  //     </tr>
+  //   );
+  // }
+
+  // with break:
+
   const rows = [];
+
   for (const time of timeOptions) {
-    const cells = [];
+    const rowCells = [];
 
     for (const coach of coachRotations) {
-      if (coach.rotations.length > 0) {
-        for (const rotation of coach.rotations) {
-          if (
-            timeOptions.indexOf(time) >=
-              timeOptions.indexOf(rotation.startTime) &&
-            timeOptions.indexOf(time) < timeOptions.indexOf(rotation.endTime)
-          ) {
-            cells.push(
-              <td key={`${time}${coach.name}`}>{rotation.eventCode}</td>
-            );
-          } else {
-            cells.push(<td key={`${time}${coach.name}`}></td>);
-          }
+      let cellAdded = false;
+
+      for (const rotation of coach.rotations) {
+        if (
+          timeOptions.indexOf(time) >=
+            timeOptions.indexOf(rotation.startTime) &&
+          timeOptions.indexOf(time) < timeOptions.indexOf(rotation.endTime)
+        ) {
+          rowCells.push(
+            <td key={`${time}-${coach.name}`}>{rotation.eventCode}</td>
+          );
+          cellAdded = true;
+          break; // Stop checking other rotations for this coach
         }
-      } else {
-        cells.push(<td key={`${time}${coach.name}`}></td>);
       }
 
-      // if (level.times[time] === "recVault") {
-      //   cells.push(
-      //     <td
-      //       key={`${time}${level.levelCode}`}
-      //       style={{ backgroundColor: "lightgreen" }}
-      //     >
-      //       {level.times[time]}
-      //     </td>
-      //   );
-      // } else if (level.times[time] === "recBars") {
-      //   cells.push(
-      //     <td
-      //       key={`${time}${level.levelCode}`}
-      //       style={{ backgroundColor: "lightblue" }}
-      //     >
-      //       {level.times[time]}
-      //     </td>
-      //   );
-      // } else if (level.times[time] === "recBeam") {
-      //   cells.push(
-      //     <td
-      //       key={`${time}${level.levelCode}`}
-      //       style={{ backgroundColor: "lightpink" }}
-      //     >
-      //       {level.times[time]}
-      //     </td>
-      //   );
-      // } else if (level.times[time] === "recFloorA") {
-      //   cells.push(
-      //     <td
-      //       key={`${time}${level.levelCode}`}
-      //       style={{ backgroundColor: "gold" }}
-      //     >
-      //       {level.times[time]}
-      //     </td>
-      //   );
-      // } else {
-      //   cells.push(
-      //     <td key={`${time}${level.levelCode}`}>{level.times[time]}</td>
-      //   );
-      // }
+      if (!cellAdded) {
+        rowCells.push(<td key={`${time}-${coach.name}`}></td>);
+      }
     }
 
     rows.push(
       <tr key={`${time}row`}>
         <td key={time}>{time}</td>
-        {cells}
+        {rowCells}
       </tr>
     );
   }
+
+  //
 
   const [addingEvent, setAddingEvent] = useState(false);
 

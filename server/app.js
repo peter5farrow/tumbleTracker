@@ -192,7 +192,9 @@ app.get("/api/rotations/:inputDay", async (req, res) => {
 
     const finalArr = [];
     for (const coach of coaches) {
-      const rotations = await coach.getRotations();
+      const rotations = await coach.getRotations({
+        where: { dayCode: inputDay },
+      });
       finalArr.push({ name: coach.coachName, rotations: rotations });
     }
 
@@ -282,6 +284,7 @@ app.put("/api/add-rotation", async (req, res) => {
   try {
     const hasConflict = await Rotation.findOne({
       where: {
+        dayCode: day,
         eventCode: event,
         [Sequelize.Op.or]: [
           {

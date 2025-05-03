@@ -9,7 +9,7 @@ const eventOptions = await axios.get("/api/events");
 const timeOptions = await axios.get("/api/times");
 
 export default function AddEventWindow({ inputDay, levelOptions, onClose }) {
-  const [inputLevel, setInputLevel] = useState(levelOptions[0]);
+  const [inputLevel, setInputLevel] = useState(levelOptions[0].levelCode);
   const [inputEvent, setInputEvent] = useState(eventOptions.data[0].eventCode);
   const [inputStartTime, setInputStartTime] = useState(timeOptions.data[0]);
   const [inputEndTime, setInputEndTime] = useState(timeOptions.data[5]);
@@ -29,21 +29,24 @@ export default function AddEventWindow({ inputDay, levelOptions, onClose }) {
   const handleAddEvent = async (e) => {
     try {
       e.preventDefault();
-      const res = await axios.put("/api/add-rotation", {
+
+      const objToSend = {
         day: inputDay,
         level: inputLevel,
         event: inputEvent,
         startTime: inputStartTime,
         endTime: inputEndTime,
-      });
+      };
+
+      const res = await axios.put("/api/add-rotation", objToSend);
       console.log(res.data);
+
+      // Ideally change this to just refetch rotations
+      location.reload();
     } catch (err) {
       if (err.response) {
         if (err.response.status === 409) {
-          const conflictedEvent = await axios.get(
-            `/api/eventName/${inputEvent}`
-          );
-          alert(`Error: ${conflictedEvent.data} in use at selected time.`);
+          alert(`Error: ${inputEvent} in use at selected time.`);
         } else {
           alert(`Unexpected error: ${err.response.status}`);
         }

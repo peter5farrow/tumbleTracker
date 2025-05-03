@@ -19,12 +19,10 @@ export default function EditDataPage() {
       const levelsCodesArr = levelObjs.map((obj) => obj.levelCode);
       setSelectedLevels(levelsCodesArr);
     };
-
     fetchLevels();
   }, [inputDay]);
 
   const navigate = useNavigate();
-
   const handleDayChange = (e) => {
     setInputDay(e.target.value);
   };
@@ -35,11 +33,8 @@ export default function EditDataPage() {
       day: inputDay,
       levels: selectedLevels,
     });
-    console.log(res.data);
-    navigate("/calendar");
+    navigate("/");
   };
-  console.log(inputDay);
-  console.log(selectedLevels);
 
   return (
     <>
