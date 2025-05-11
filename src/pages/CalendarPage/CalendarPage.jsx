@@ -119,7 +119,9 @@ export default function Calendar() {
 
     rows.push(
       <tr key={`${time}row`}>
-        <td key={time}>{time}</td>
+        <td key={time}>
+          {(Number(time.slice(0, 2)) - 12).toString() + time.slice(2, 5)}
+        </td>
         {rowCells}
       </tr>
     );

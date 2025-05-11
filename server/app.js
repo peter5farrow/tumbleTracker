@@ -137,15 +137,6 @@ app.get("/api/rotations", async (req, res) => {
   }
 });
 
-// app.get("/api/rotationCoaches", async (req, res) => {
-//   try {
-//     const rotationCoaches = await RotationCoach.findAll();
-//     res.send(rotationCoaches);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
-
 app.get("/api/levels/:inputDay", async (req, res) => {
   try {
     const { inputDay } = req.params;

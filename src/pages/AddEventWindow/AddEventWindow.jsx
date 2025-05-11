@@ -89,5 +89,3 @@ export default function AddEventWindow({ inputDay, levelOptions, onClose }) {
     </div>
   );
 }
-
-//WORK ON DURATION AND INPUTS
