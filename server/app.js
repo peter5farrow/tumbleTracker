@@ -163,6 +163,26 @@ app.get("/api/levels/:inputDay", async (req, res) => {
   }
 });
 
+app.get("/api/coaches/:inputLevel", async (req, res) => {
+  try {
+    const { inputLevel } = req.params;
+
+    const coachLevels = await CoachLevel.findAll({
+      where: { levelLevelCode: inputLevel },
+    });
+
+    const coachesList = [];
+    for (const coach of coachLevels) {
+      const oneCoach = await Coach.findByPk(coach.coachCoachId);
+      coachesList.push(oneCoach);
+    }
+
+    res.send(coachesList);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 app.get("/api/coaches/:inputDay", async (req, res) => {
   try {
     const { inputDay } = req.params;
@@ -182,7 +202,7 @@ app.get("/api/coaches/:inputDay", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-//*
+
 app.get("/api/rotations/:inputDay", async (req, res) => {
   try {
     const { inputDay } = req.params;
@@ -222,11 +242,27 @@ app.put("/api/update-coaches", async (req, res) => {
       },
     });
 
+    const dayCoaches = await DayCoach.findAll({
+      where: {
+        coachCoachId: coaches,
+      },
+    });
+
+    const dayInstances = [];
+    for (const day of dayCoaches) {
+      dayInstances.push(
+        await Day.findOne({
+          where: { dayCode: day.dayDayCode },
+        })
+      );
+    }
+
     await thisLevel.setCoaches(coachInstances);
+    await thisLevel.setDays(dayInstances);
 
     const updatedLevel = await Level.findOne({
       where: { levelCode: level },
-      include: Coach,
+      include: [{ model: Coach }, { model: Day }],
     });
 
     res.status(200).json(updatedLevel);
