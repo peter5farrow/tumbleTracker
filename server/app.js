@@ -137,6 +137,15 @@ app.get("/api/rotations", async (req, res) => {
   }
 });
 
+// app.get("/api/rotationCoaches", async (req, res) => {
+//   try {
+//     const rotationCoaches = await RotationCoach.findAll();
+//     res.send(rotationCoaches);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
+
 app.get("/api/levels/:inputDay", async (req, res) => {
   try {
     const { inputDay } = req.params;
@@ -242,23 +251,23 @@ app.put("/api/update-coaches", async (req, res) => {
       },
     });
 
-    const dayCoaches = await DayCoach.findAll({
+    const days = await thisLevel.getDays();
+    console.log(days);
+    for (const day of days) {
+      await day.setCoaches(coachInstances);
+    }
+
+    const rotations = await Rotation.findAll({
       where: {
-        coachCoachId: coaches,
+        levelCode: level,
       },
     });
 
-    const dayInstances = [];
-    for (const day of dayCoaches) {
-      dayInstances.push(
-        await Day.findOne({
-          where: { dayCode: day.dayDayCode },
-        })
-      );
+    for (const rotation of rotations) {
+      await rotation.setCoaches(coachInstances);
     }
 
     await thisLevel.setCoaches(coachInstances);
-    await thisLevel.setDays(dayInstances);
 
     const updatedLevel = await Level.findOne({
       where: { levelCode: level },
@@ -350,6 +359,7 @@ app.put("/api/add-rotation", async (req, res) => {
       const coaches = await CoachLevel.findAll({
         where: { levelLevelCode: level },
       });
+      console.log(coaches);
 
       const newRotation = await Rotation.create({
         levelCode: level,

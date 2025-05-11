@@ -23,6 +23,8 @@ export default function EditDataPage() {
       if (levelObjs.length > 0) {
         const levelsCodesArr = levelObjs.map((obj) => obj.levelCode);
         setSelectedLevels(levelsCodesArr);
+      } else {
+        setSelectedLevels([]);
       }
     };
     fetchLevels();
@@ -35,6 +37,8 @@ export default function EditDataPage() {
       if (coachObjs.length > 0) {
         const coachIdsArr = coachObjs.map((obj) => obj.coachId);
         setSelectedCoaches(coachIdsArr);
+      } else {
+        setSelectedCoaches([]);
       }
     };
     fetchCoaches();
@@ -56,6 +60,7 @@ export default function EditDataPage() {
       day: inputDay,
       levels: selectedLevels,
     });
+    console.log(res.data);
     navigate("/");
   };
 
@@ -65,6 +70,7 @@ export default function EditDataPage() {
       level: inputLevel,
       coaches: selectedCoaches,
     });
+    console.log(res.data);
     navigate("/");
   };
 

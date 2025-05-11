@@ -93,9 +93,20 @@ export default function Calendar() {
             timeOptions.indexOf(rotation.startTime) &&
           timeOptions.indexOf(time) < timeOptions.indexOf(rotation.endTime)
         ) {
-          rowCells.push(
-            <td key={`${time}-${coach.name}`}>{rotation.eventCode}</td>
-          );
+          if (rotation.levelCode === "pre3A") {
+            rowCells.push(
+              <td
+                key={`${time}-${coach.name}`}
+                style={{ backgroundColor: "lightgreen" }}
+              >
+                {rotation.eventCode}
+              </td>
+            );
+          } else {
+            rowCells.push(
+              <td key={`${time}-${coach.name}`}>{rotation.eventCode}</td>
+            );
+          }
           cellAdded = true;
           break; // Stop checking other rotations for this coach
         }
