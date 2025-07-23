@@ -5,6 +5,7 @@ import AddEventButton from "./components/AddEventButton.jsx";
 import AddEventWindow from "../AddEventWindow/AddEventWindow.jsx";
 import DayInput from "./components/DayInput.jsx";
 import EditDataButton from "./components/EditDataButton.jsx";
+import LevelInfoBox from "./components/LevelInfoBox.jsx";
 
 const dayOptions = await axios.get("/api/days");
 const timeOptionsObj = await axios.get("/api/times");
@@ -188,6 +189,7 @@ export default function Calendar() {
           handleDayChange={handleDayChange}
         />
         <AddEventButton onClick={handleAddingEvent} />
+        <LevelInfoBox coachRotations={coachRotations} />
         <table>
           <thead>
             <tr>
